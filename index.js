@@ -68,23 +68,23 @@ const onReaction = async (reaction, user) => {
 
 	case config.completedEmoji: {
 		if (reaction.message.channel.name === config.availableName || reaction.message.channel.name === config.problemsName) {
-			processReaction(reaction.message, config.processingName, 'update', true);
+			processReaction(reaction.message, config.processingName, 'update', 'BLUE', true);
 		}
 
-		else if (reaction.message.channel.name === config.processingName) processReaction(reaction.message, config.completedName, 'completed', true);
+		else if (reaction.message.channel.name === config.processingName) processReaction(reaction.message, config.completedName, 'completed', 'GREEN', true);
 
 		break;
 	}
 
 	case config.problemEmoji: {
-		processReaction(reaction.message, config.problemsName, 'update', true);
+		processReaction(reaction.message, config.problemsName, 'update', 'RED', true);
 		break;
 	}
 
 	case config.reverseEmoji: {
-		if (reaction.message.channel.name === config.completedName) processReaction(reaction.message, config.processingName, 'reverse', true);
+		if (reaction.message.channel.name === config.completedName) processReaction(reaction.message, config.processingName, 'reverse', 'BLUE', true);
 
-		else if (reaction.message.channel.name === config.processingName) processReaction(reaction.message, config.availableName, 'update', true);
+		else if (reaction.message.channel.name === config.processingName) processReaction(reaction.message, config.availableName, 'update', 'GOLD', true);
 
 		break;
 	}
@@ -122,19 +122,19 @@ const onMemberUpdate = (_, newMember) => {
 
 const applyReactions = (msg, reactions) => reactions.forEach(async reaction => await msg.react(reaction));
 
-const processReaction = async (msg, newChannel, action, remove) => {
-	const _msg = await forwardTo(findVendorChannel(msg, newChannel), msg, remove);
-	forwardMaster(_msg, action);
+const processReaction = async (msg, newChannel, action, colour, remove) => {
+	const _msg = await forwardTo(findVendorChannel(msg, newChannel), msg, colour, remove);
+	forwardMaster(_msg, action, colour);
 };
 
 const findVendorChannel = (msg, name) => bot.channels.cache.find(channel => channel.parentID === msg.channel.parentID && channel.name === name);
 
-const forwardTo = async (channel, msg, remove) => {
+const forwardTo = async (channel, msg, colour, remove) => {
 	if (remove) msg.delete();
-	return await channel.send(msg.embeds[0]);
+	return await channel.send(new Discord.MessageEmbed(msg.embeds[0]).setColor(colour));
 };
 
-const forwardMaster = async (msg, action) => {
+const forwardMaster = async (msg, action, colour) => {
 	switch (action) {
 
 	case 'completed': {
@@ -156,7 +156,7 @@ const forwardMaster = async (msg, action) => {
 		const order = await Order.findOne({ 'order.serial': parseSerial(msg) });
 
 		bot.channels.cache.get(order.master.message.channel).messages.fetch(order.master.message.id).then(_msg => {
-			_msg.edit(new Discord.MessageEmbed(_msg.embeds[0]).setURL(msg.url));
+			_msg.edit(new Discord.MessageEmbed(_msg.embeds[0]).setURL(msg.url).setColor(colour));
 		});
 	}
 	}

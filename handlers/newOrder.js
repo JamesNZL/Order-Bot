@@ -65,6 +65,7 @@ module.exports = async (bot, msg) => {
 	function messageToEmbed(url) {
 		const embed = new Discord.MessageEmbed()
 			.setDescription(msg.content)
+			.setColor('GOLD')
 			.setTitle(`Order #${masterSerial} | Vendor Order #${vendorSerial}`)
 			.setAuthor(msg.member.displayName, msg.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
