@@ -122,9 +122,9 @@ const onMemberUpdate = (_, newMember) => {
 
 const applyReactions = (msg, reactions) => reactions.forEach(async reaction => await msg.react(reaction));
 
-const processReaction = async (msg, newChannel, type, remove) => {
+const processReaction = async (msg, newChannel, action, remove) => {
 	const _msg = await forwardTo(findVendorChannel(msg, newChannel), msg, remove);
-	forwardMaster(_msg, type);
+	forwardMaster(_msg, action);
 };
 
 const findVendorChannel = (msg, name) => bot.channels.cache.find(channel => channel.parentID === msg.channel.parentID && channel.name === name);
