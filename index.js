@@ -148,7 +148,7 @@ const forwardMaster = async (msg, action, colour) => {
 	}
 
 	case 'delete': {
-		processMaster(msg, config.masterDeletedID);
+		processMaster(msg, config.masterDeletedID, true);
 		break;
 	}
 
@@ -162,7 +162,7 @@ const forwardMaster = async (msg, action, colour) => {
 	}
 };
 
-const processMaster = async (msg, newChannel) => {
+const processMaster = async (msg, newChannel, remove) => {
 	const order = await Order.findOne({ 'order.serial': parseSerial(msg) });
 
 	bot.channels.cache.get(newChannel).send(new Discord.MessageEmbed(msg.embeds[0]).setURL(msg.url));
