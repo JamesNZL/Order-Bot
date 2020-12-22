@@ -17,7 +17,7 @@ module.exports = {
 			return newOrder(bot, msg);
 		}
 
-		else if (msg.author.id === bot.user.id && config.vendorChannels.includes(msg.channel.name) && msg.embeds[0].title && msg.embeds[0].title.includes('Order')) {
+		else if (msg.author.id === bot.user.id && (config.vendorChannels.includes(msg.channel.name) || config.masterChannels.includes(msg.channel.id)) && msg.embeds[0].title && msg.embeds[0].title.includes('Order')) {
 			updateOrder(msg);
 
 			switch (msg.channel.name) {
