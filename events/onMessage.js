@@ -17,21 +17,21 @@ module.exports = {
 			return newOrder(bot, msg);
 		}
 
-		if (msg.author.id === bot.user.id) {
+		else if (msg.author.id === bot.user.id && config.vendorChannels.includes(msg.channel.name) && msg.embeds[0].title && msg.embeds[0].title.includes('Order')) {
 			updateOrder(msg);
 
 			switch (msg.channel.name) {
 
 			case config.availableName: {
-				applyReactions(msg, [config.completedEmoji, config.problemEmoji, config.deleteEmoji]);
+				applyReactions(msg, [config.completedEmoji, config.problemEmoji, config.editEmoji, config.deleteEmoji]);
 				break;
 			}
 			case config.problemsName: {
-				applyReactions(msg, [config.warningEmoji, config.completedEmoji, config.editEmoji, config.deleteEmoji]);
+				applyReactions(msg, [config.noticeEmoji, config.completedEmoji, config.editEmoji, config.deleteEmoji]);
 				break;
 			}
 			case config.processingName: {
-				applyReactions(msg, [config.completedEmoji, config.problemEmoji, config.reverseEmoji]);
+				applyReactions(msg, [config.completedEmoji, config.problemEmoji, config.reverseEmoji, config.editEmoji]);
 				break;
 			}
 			case config.completedName: {

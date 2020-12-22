@@ -77,7 +77,7 @@ module.exports = async (bot, msg) => {
 };
 
 const randomSerial = async field => {
-	const generatedSerial = ('' + Math.random()).substring(2, 7);
+	const generatedSerial = Number(('' + Math.random()).substring(2, 7));
 	const existingSerial = await Order.findOne({ [field]: generatedSerial }).exec();
 
 	if (existingSerial) return randomSerial(field);

@@ -14,4 +14,6 @@ module.exports = {
 	editEmoji: '📝',
 	noticeEmoji: '💬',
 	vendorEmojis: ['🗑️', '📝'],
+	vendorChannels: ['available', 'problems', 'processing', 'completed'],
+	dateString: 'mmm dd yyyy HH:MM',
 };
