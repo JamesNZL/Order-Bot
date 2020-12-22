@@ -43,7 +43,7 @@ const onMessage = async msg => {
 			break;
 		}
 		case config.problemsName: {
-			applyReactions(msg, [config.completedEmoji, config.deleteEmoji]);
+			applyReactions(msg, [config.warningEmoji, config.completedEmoji, config.editEmoji, config.deleteEmoji]);
 			break;
 		}
 		case config.processingName: {
@@ -62,7 +62,7 @@ const onReaction = async (reaction, user) => {
 
 	if (reaction.partial) await reaction.fetch();
 
-	if (!config.adminIDs.includes(user.id) && reaction.emoji.name !== config.deleteEmoji) return reaction.users.remove(user.id);
+	if (!config.adminIDs.includes(user.id) && !config.vendorEmojis.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
 
 	switch (reaction.emoji.name) {
 
@@ -76,6 +76,11 @@ const onReaction = async (reaction, user) => {
 		break;
 	}
 
+	case config.noticeEmoji: {
+		userInput(user, reaction.message, 'Comments');
+		break;
+	}
+
 	case config.problemEmoji: {
 		processReaction(reaction.message, config.problemsName, 'update', 'RED', true);
 		break;
@@ -86,6 +91,11 @@ const onReaction = async (reaction, user) => {
 
 		else if (reaction.message.channel.name === config.processingName) processReaction(reaction.message, config.availableName, 'update', 'GOLD', true);
 
+		break;
+	}
+
+	case config.editEmoji: {
+		userInput(user, reaction.message, 'Amendments');
 		break;
 	}
 

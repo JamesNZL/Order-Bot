@@ -11,4 +11,7 @@ module.exports = {
 	problemEmoji: '❌',
 	reverseEmoji: '🔄',
 	deleteEmoji: '🗑️',
+	editEmoji: '📝',
+	noticeEmoji: '💬',
+	vendorEmojis: ['🗑️', '📝'],
 };
