@@ -138,7 +138,12 @@ const userInput = async (bot, user, msg, action, type) => {
 		.addField('Order Details', msg.embeds[0].description)
 		.setTimestamp();
 
-	sendDM(user, editingEmbed, msg.channel);
+	['Comments', 'Amendments'].forEach(field => {
+		const foundField = msg.embeds[0].fields.find(_field => _field.name === field);
+		if (foundField) editingEmbed.addField(field, foundField.value);
+	});
+
+	sendDM(user, editingEmbed.addField('Order Link', `[Order Message](${msg.url})`), msg.channel);
 
 	const neededInputs = {
 		[type.toLowerCase()]: {
@@ -224,7 +229,7 @@ const processUpdate = async (bot, input, type, user, msg) => {
 		? updatedEmbed.fields[existingIndex].value += `\n${dateFormat(config.dateString)} — ${input[type.toLowerCase()]}`
 		: updatedEmbed.addField(type, `\n${dateFormat(config.dateString)} — ${input[type.toLowerCase()]}`);
 
-	await sendDM(user, updatedEmbed, msg.channel);
+	await sendDM(user, new Discord.MessageEmbed(updatedEmbed).addField('Order Link', `[Order Message](${msg.url})`), msg.channel);
 
 	updatedEmbed.setTitle(msg.embeds[0].title);
 	updatedEmbed.setColor(msg.embeds[0].color);
