@@ -1,5 +1,6 @@
 'use strict';
 
+const Discord = require('discord.js');
 const Order = require('../models/order');
 
 const { updateOrder } = require('../handlers');
@@ -15,7 +16,47 @@ module.exports = {
 		const { bot } = require('../');
 
 		if (!msg.partial && !msg.author.bot) return;
-		if (msg.partial) console.log(msg);
+
+		if (msg.partial) {
+			return setTimeout(async () => {
+				const vendorMatch = await Order.findOne({ 'vendor.message.id': msg.id });
+				const masterMatch = await Order.findOne({ 'master.message.id': msg.id });
+
+				const findMatch = field => {
+					return (vendorMatch)
+						? vendorMatch.vendor.message[field]
+						: masterMatch.master.message[field];
+				};
+
+				const order = vendorMatch || masterMatch;
+
+				if (!order) return;
+
+				msg = {
+					id: msg.id,
+					url: findMatch('url'),
+					channel: bot.channels.cache.get(findMatch('channel')),
+					embeds: [new Discord.MessageEmbed({
+						title: `Order #${order.serial}`,
+						description: order.details,
+						color: config.embedColours[order.state],
+						timestamp: Date.now(),
+						author: {
+							name: bot.channels.cache.get(findMatch('channel')).guild.members.cache.get(order.vendor.id).displayName,
+							iconURL: bot.users.cache.get(order.vendor.id).displayAvatarURL({ dynamic: true }),
+						},
+					})],
+				};
+
+				if (msg.channel.id === config.masterDeletedID) return msg.channel.send(msg.embeds[0]);
+
+				else if (config.masterChannels.includes(msg.channel.id)) {
+					msg.embeds[0].addField('Order Link', `[Vendor Message](${order.vendor.message.url})`);
+				}
+
+				processDeletion(bot, msg, order);
+			}, config.databaseDelay);
+		}
 
 		if (msg.channel.id === config.masterDeletedID) return msg.channel.send(msg.embeds[0]);
 
@@ -30,22 +71,22 @@ module.exports = {
 
 			if (target.id === msg.author.id && executor.id !== bot.user.id && msg.embeds[0] && msg.embeds[0].title.includes('Order')) {
 				setTimeout(async () => {
-					const order = await Order.findOne({ 'serial': parseSerial(msg) }, error => {
-						if (error) console.error(error);
-					});
-
-					if (!order) return;
-
-					checkApparentMessage(bot, order, 'vendor', () => {
-						updateOrder(msg, true);
-						forwardMaster(bot, msg, 'delete');
-					});
-
-					checkApparentMessage(bot, order, 'master', () => msg.channel.send(msg.embeds[0]));
-				}, 5000);
+					processDeletion(bot, msg, await Order.findOne({ 'serial': parseSerial(msg) }));
+				}, config.databaseDelay);
 			}
 		}
 	},
+};
+
+const processDeletion = (bot, msg, order) => {
+	if (!order) return;
+
+	checkApparentMessage(bot, order, 'vendor', () => {
+		updateOrder(msg, true);
+		forwardMaster(bot, msg, 'delete');
+	});
+
+	checkApparentMessage(bot, order, 'master', () => msg.channel.send(msg.embeds[0]));
 };
 
 const checkApparentMessage = async (bot, order, path, callback) => {

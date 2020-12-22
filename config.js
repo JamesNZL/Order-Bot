@@ -17,4 +17,12 @@ module.exports = {
 	vendorChannels: ['available', 'problems', 'processing', 'completed'],
 	masterChannels: ['790501034182574101', '790503805175070720', '790501055804604456'],
 	dateString: 'mmm dd yyyy HH:MM',
+	databaseDelay: 1500,
+	embedColours: {
+		'available': 'GOLD',
+		'problems': 'RED',
+		'processing': 'BLUE',
+		'completed': 'GREEN',
+		'deleted': null,
+	},
 };
