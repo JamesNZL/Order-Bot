@@ -36,26 +36,23 @@ module.exports = {
 
 					if (!order) return;
 
-					if (order.vendor.message.channel) {
-						await bot.channels.cache.get(order.vendor.message.channel).messages.fetch(order.vendor.message.id)
-							.catch(error => {
-								if (error.message === 'Unknown Message' && order.state !== 'deleted') {
-									updateOrder(msg, true);
-									forwardMaster(bot, msg, 'delete');
-								}
-							});
-					}
+					checkApparentMessage(bot, order, 'vendor', () => {
+						updateOrder(msg, true);
+						forwardMaster(bot, msg, 'delete');
+					});
 
-					if (order.master.message.channel) {
-						await bot.channels.cache.get(order.master.message.channel).messages.fetch(order.master.message.id)
-							.catch(error => {
-								if (error.message === 'Unknown Message' && order.state !== 'deleted') {
-									msg.channel.send(msg.embeds[0]);
-								}
-							});
-					}
+					checkApparentMessage(bot, order, 'master', () => msg.channel.send(msg.embeds[0]));
 				}, 5000);
 			}
 		}
 	},
+};
+
+const checkApparentMessage = async (bot, order, path, callback) => {
+	if (order[path].message.channel) {
+		await bot.channels.cache.get(order[path].message.channel).messages.fetch(order[path].message.id)
+			.catch(error => {
+				if (error.message === 'Unknown Message' && order.state !== 'deleted') callback();
+			});
+	}
 };
