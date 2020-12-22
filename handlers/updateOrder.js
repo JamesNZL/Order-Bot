@@ -5,7 +5,7 @@ const Order = require('../models/order');
 const { parseSerial } = require('../modules');
 
 module.exports = async (msg, deleted) => {
-	const order = await Order.findOne({ 'order.serial': parseSerial(msg) }, error => {
+	const order = await Order.findOne({ 'serial': parseSerial(msg) }, error => {
 		if (error) console.error(error);
 	});
 
@@ -26,8 +26,8 @@ const updateField = (order, msg, field) => {
 	order.markModified(`${field}.message.channel`);
 
 	if (field === 'vendor') {
-		order.order.state = msg.channel.name;
-		order.markModified('order.state');
+		order.state = msg.channel.name;
+		order.markModified('state');
 	}
 
 	order.save();

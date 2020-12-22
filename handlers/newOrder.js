@@ -13,7 +13,7 @@ module.exports = async (bot, msg) => {
 	let masterSerial, vendorSerial;
 
 	try {
-		masterSerial = await randomSerial('order.serial');
+		masterSerial = await randomSerial('serial');
 		vendorSerial = calculateSerial(await findGreatest('vendor.serial', { 'vendor.id': msg.author.id }), 'vendor');
 
 		if (recentMasterSerials.has(masterSerial)) masterSerial++;
@@ -35,11 +35,9 @@ module.exports = async (bot, msg) => {
 
 	const order = await new Order({
 		_id: mongoose.Types.ObjectId(),
-		order: {
-			serial: masterSerial,
-			details: msg.content,
-			time: Date.now(),
-		},
+		serial: masterSerial,
+		details: msg.content,
+		time: Date.now(),
 		vendor: {
 			id: msg.author.id,
 			category: msg.channel.parentID,

@@ -4,13 +4,11 @@ const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
-	order: {
-		serial: Number,
-		details: String,
-		time: Number,
-		state: { type: String, default: 'available' },
-		cost: { type: Number, default: 0 },
-	},
+	serial: Number,
+	details: String,
+	time: Number,
+	state: { type: String, default: 'available' },
+	cost: { type: Number, default: 0 },
 	vendor: {
 		id: String,
 		category: String,
