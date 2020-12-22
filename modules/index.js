@@ -1,5 +1,3 @@
 'use strict';
 
-const processIndex = require('../handlers/processIndex');
-
-module.exports = processIndex('./modules');
+module.exports = require('../handlers/processIndex')('./modules');
