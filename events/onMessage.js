@@ -42,4 +42,4 @@ module.exports = {
 	},
 };
 
-const applyReactions = (msg, reactions) => reactions.forEach(async reaction => await msg.react(reaction));
+const applyReactions = (msg, reactions) => reactions.forEach(async reaction => await msg.react(reaction).catch(() => null));
