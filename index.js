@@ -12,7 +12,6 @@ const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 bot.login(TOKEN).then(() => exports.bot = bot);
 mongoose.login(MONGOURI);
 
-bot.on('ready', () => console.log(`Logged in as ${bot.user.tag}!`));
 process.on('unhandledRejection', (...args) => console.error(...args));
 
 const eventHandler = (process, event, module) => process.on(event, (...args) => module.execute(event, ...args));
