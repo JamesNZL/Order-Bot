@@ -13,7 +13,7 @@ module.exports = async (bot, msg) => {
 	let masterSerial, vendorSerial;
 
 	try {
-		masterSerial = calculateSerial(await findGreatest('order.serial'), 'order');
+		masterSerial = await randomSerial('order.serial');
 		vendorSerial = calculateSerial(await findGreatest('vendor.serial', { 'vendor.id': msg.author.id }), 'vendor');
 
 		if (recentMasterSerials.has(masterSerial)) masterSerial++;
@@ -64,16 +64,24 @@ module.exports = async (bot, msg) => {
 
 	function messageToEmbed(url) {
 		const embed = new Discord.MessageEmbed()
-			.setDescription(msg.content)
 			.setColor('GOLD')
-			.setTitle(`Order #${masterSerial} | Vendor Order #${vendorSerial}`)
+			.setTitle(`Order #${masterSerial}`)
 			.setAuthor(msg.member.displayName, msg.author.displayAvatarURL({ dynamic: true }))
+			.setDescription(msg.content)
 			.setTimestamp();
 
-		if (url) embed.setURL(availableMessage.url);
+		if (url) embed.addField('Order Link', `[Vendor Message](${availableMessage.url})`);
 
 		return embed;
 	}
+};
+
+const randomSerial = async field => {
+	const generatedSerial = ('' + Math.random()).substring(2, 7);
+	const existingSerial = await Order.findOne({ [field]: generatedSerial }).exec();
+
+	if (existingSerial) return randomSerial(field);
+	else return generatedSerial;
 };
 
 const findGreatest = async (field, options) => await Order.find(options).sort({ [field]:-1 }).limit(1).exec();
