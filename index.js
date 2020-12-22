@@ -123,13 +123,13 @@ const onMemberUpdate = (_, newMember) => {
 const applyReactions = (msg, reactions) => reactions.forEach(async reaction => await msg.react(reaction));
 
 const processReaction = async (msg, newChannel, action, colour, remove) => {
-	const _msg = await forwardTo(findVendorChannel(msg, newChannel), msg, colour, remove);
+	const _msg = await forwardToVendor(findVendorChannel(msg, newChannel), msg, colour, remove);
 	forwardMaster(_msg, action, colour);
 };
 
 const findVendorChannel = (msg, name) => bot.channels.cache.find(channel => channel.parentID === msg.channel.parentID && channel.name === name);
 
-const forwardTo = async (channel, msg, colour, remove) => {
+const forwardToVendor = async (channel, msg, colour, remove) => {
 	if (remove) msg.delete();
 	return await channel.send(new Discord.MessageEmbed(msg.embeds[0]).setColor(colour));
 };
@@ -156,7 +156,7 @@ const forwardMaster = async (msg, action, colour) => {
 		const order = await Order.findOne({ 'order.serial': parseSerial(msg) });
 
 		bot.channels.cache.get(order.master.message.channel).messages.fetch(order.master.message.id).then(_msg => {
-			_msg.edit(new Discord.MessageEmbed(_msg.embeds[0]).setURL(msg.url).setColor(colour));
+			_msg.edit(updateEmbed(msg, colour));
 		});
 	}
 	}
@@ -165,7 +165,7 @@ const forwardMaster = async (msg, action, colour) => {
 const processMaster = async (msg, newChannel, remove) => {
 	const order = await Order.findOne({ 'order.serial': parseSerial(msg) });
 
-	bot.channels.cache.get(newChannel).send(new Discord.MessageEmbed(msg.embeds[0]).setURL(msg.url));
+	bot.channels.cache.get(newChannel).send(updateEmbed(msg, null, remove));
 	bot.channels.cache.get(order.master.message.channel).messages.fetch(order.master.message.id).then(_msg => _msg.delete());
 };
 
@@ -174,3 +174,12 @@ const findCategory = (guild, name) => guild.channels.cache.find(channel => chann
 const setChannelVisibility = async (channel, users, show) => await users.forEach(user => channel.createOverwrite(user, { 'VIEW_CHANNEL': show }));
 
 const createChannels = (guild, channels, category) => channels.forEach(channel => guild.channels.create(channel, { parent: category }));
+
+const updateEmbed = (msg, colour, remove) => {
+	const embed = new Discord.MessageEmbed(msg.embeds[0]);
+
+	if (!remove) embed.addField('Order Link', `[Vendor Message](${msg.url})`);
+	if (colour) embed.setColor(colour);
+
+	return embed;
+};
