@@ -1,6 +1,5 @@
 'use strict';
 
-const { bot } = require('../');
 const config = require('../config');
 
 const { newOrder, updateOrder } = require('../handlers');
@@ -9,6 +8,8 @@ module.exports = {
 	events: ['message'],
 	process: [],
 	async execute(_, msg) {
+		const { bot } = require('../');
+
 		if (msg.partial) return;
 
 		if (!msg.embeds[0] && msg.channel.name === config.availableName) {

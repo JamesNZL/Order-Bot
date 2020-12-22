@@ -2,7 +2,6 @@
 
 const Discord = require('discord.js');
 
-const { bot } = require('../');
 const config = require('../config');
 const Order = require('../models/order');
 
@@ -13,6 +12,8 @@ module.exports = {
 	events: ['messageReactionAdd'],
 	process: [],
 	async execute(_, reaction, user) {
+		const { bot } = require('../');
+
 		if (user.bot) return;
 
 		if (reaction.partial) await reaction.fetch();

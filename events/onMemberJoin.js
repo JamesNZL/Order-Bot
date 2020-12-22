@@ -1,12 +1,13 @@
 'use strict';
 
-const { bot } = require('../');
 const config = require('../config');
 
 module.exports = {
 	events: ['guildMemberAdd'],
 	process: [],
 	async execute(_, member) {
+		const { bot } = require('../');
+
 		const existingCategory = findCategory(member.guild, member.user.tag);
 
 		if (existingCategory) existingCategory.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
