@@ -233,6 +233,11 @@ const processUpdate = async (bot, input, type, user, msg) => {
 	forwardMaster(bot, updatedMessage, 'update', msg.embeds[0].color);
 
 	pendingInput.delete(user.id);
+
+	const order = await Order.findOne({ 'serial': parseSerial(msg) });
+
+	order[type.toLowerCase()] = updatedEmbed.fields.find(field => field.name === type).value;
+	order.save();
 };
 
 module.exports['forwardMaster'] = forwardMaster;

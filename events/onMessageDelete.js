@@ -48,6 +48,10 @@ module.exports = {
 					})],
 				};
 
+				['Comments', 'Amendments'].forEach(field => {
+					if (order[field.toLowerCase()]) msg.embeds[0].addField(field, order[field.toLowerCase()]);
+				});
+
 				if (msg.channel.id === config.masterDeletedID) return msg.channel.send(msg.embeds[0]);
 
 				else if (config.masterChannels.includes(msg.channel.id)) {

@@ -6,6 +6,8 @@ const orderSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
 	serial: Number,
 	details: String,
+	comments: { type: String, default: '' },
+	amendments: { type: String, default: '' },
 	time: Number,
 	state: { type: String, default: 'available' },
 	cost: { type: Number, default: 0 },
