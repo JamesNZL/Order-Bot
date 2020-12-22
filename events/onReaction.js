@@ -117,10 +117,10 @@ const processMaster = async (bot, msg, newChannel, remove) => {
 };
 
 const updateEmbed = (msg, colour, remove) => {
-	const embed = new Discord.MessageEmbed(msg.embeds[0])
-		.setColor(colour || 'DEFAULT');
+	const embed = new Discord.MessageEmbed(msg.embeds[0]);
 
 	if (!remove) embed.addField('Order Link', `[Vendor Message](${msg.url})`);
+	if (colour) embed.setColor(colour);
 
 	return embed;
 };
