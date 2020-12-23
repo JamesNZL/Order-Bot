@@ -12,9 +12,6 @@ const configSchema = mongoose.Schema({
 	},
 	dateString: { type: String, default: config.dateString },
 	databaseDelay: { type: Number, default: config.databaseDelay },
-	admin: {
-		ids: { type: Array, default: config.admin.ids },
-	},
 	master: {
 		active: {
 			id: String,

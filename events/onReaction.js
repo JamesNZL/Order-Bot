@@ -6,7 +6,7 @@ const dateFormat = require('dateformat');
 const config = require('../config');
 const Order = require('../models/order');
 
-const { sendDM, updateOrder } = require('../handlers');
+const { adminList, sendDM, updateOrder } = require('../handlers');
 const { parseSerial } = require('../modules');
 
 const pendingInput = new Set();
@@ -21,7 +21,7 @@ module.exports = {
 
 		if (reaction.partial) await reaction.fetch();
 
-		if (!config.admin.ids.includes(user.id) && !config.emojis.vendor.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
+		if (!adminList(reaction.message.guild).includes(user.id) && !config.emojis.vendor.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
 
 		switch (reaction.emoji.name) {
 

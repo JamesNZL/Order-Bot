@@ -5,10 +5,6 @@ exports = {
 	databaseDelay: 1500,
 };
 
-exports.admin = {
-	ids: ['461320592717774848', '192181901065322496'],
-};
-
 exports.master = {
 	active: {
 		name: 'active-orders',
