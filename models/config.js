@@ -2,16 +2,18 @@
 
 const mongoose = require('mongoose');
 
+const config = require('../config');
+
 const configSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
 	guild: {
 		id: String,
 		name: String,
 	},
-	dateString: { type: String, default: 'HHMM \'h\' d mmm yy' },
-	databaseDelay: { type: Number, default: 1500 },
+	dateString: { type: String, default: config.dateString },
+	databaseDelay: { type: Number, default: config.databaseDelay },
 	admin: {
-		ids: { type: Array, default: ['461320592717774848', '192181901065322496'] },
+		ids: { type: Array, default: config.admin.ids },
 	},
 	master: {
 		active: {
@@ -29,36 +31,37 @@ const configSchema = mongoose.Schema({
 	},
 	vendor: {
 		available: {
-			name: { type: String, default: 'available' },
+			name: { type: String, default: config.vendor.available.name },
 		},
 		problems: {
-			name: { type: String, default: 'problems' },
+			name: { type: String, default: config.vendor.problems.name },
 		},
 		processing: {
-			name: { type: String, default: 'processing' },
+			name: { type: String, default: config.vendor.processing.name },
 		},
 		completed: {
-			name: { type: String, default: 'completed' },
+			name: { type: String, default: config.vendor.completed.name },
 		},
 		channels: {
-			names: { type: Array, default: ['available', 'problems', 'processing', 'completed'] },
+			names: { type: Array, default: config.vendor.channels.names },
+		},
 		},
 	},
 	emojis: {
-		onward: { type: String, default: '✅' },
-		problem: { type: String, default: '❌' },
-		comment: { type: String, default: '💬' },
-		reverse: { type: String, default: '🔄' },
-		edit: { type: String, default: '📝' },
-		delete: { type: String, default: '🗑️' },
-		vendor: { type: Array, default: ['📝', '🗑️'] },
+		onward: { type: String, default: config.emojis.onward },
+		problem: { type: String, default: config.emojis.problem },
+		comment: { type: String, default: config.emojis.comment },
+		reverse: { type: String, default: config.emojis.reverse },
+		edit: { type: String, default: config.emojis.edit },
+		delete: { type: String, default: config.emojis.delete },
+		vendor: { type: Array, default: config.emojis.vendor },
 	},
 	embedColours: {
-		available: { type: String, default: 'GOLD' },
-		problems: { type: String, default: 'RED' },
-		processing: { type: String, default: 'BLUE' },
-		completed: { type: String, default: 'GREEN' },
-		deleted: { type: String, default: '' },
+		available: { type: String, default: config.embedColours.available },
+		problems: { type: String, default: config.embedColours.problems },
+		processing: { type: String, default: config.embedColours.processing },
+		completed: { type: String, default: config.embedColours.completed },
+		deleted: { type: String, default: config.embedColours.deleted },
 	},
 });
 

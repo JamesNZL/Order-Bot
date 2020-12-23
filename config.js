@@ -1,28 +1,61 @@
-module.exports = {
-	adminIDs: ['461320592717774848', '192181901065322496'],
-	masterOrdersID: '790501034182574101',
-	masterCompletedID: '790503805175070720',
-	masterDeletedID: '790501055804604456',
-	availableName: 'available',
-	problemsName: 'problems',
-	processingName: 'processing',
-	completedName: 'completed',
-	completedEmoji: '✅',
-	problemEmoji: '❌',
-	reverseEmoji: '🔄',
-	deleteEmoji: '🗑️',
-	editEmoji: '📝',
-	noticeEmoji: '💬',
-	vendorEmojis: ['🗑️', '📝'],
-	vendorChannels: ['available', 'problems', 'processing', 'completed'],
-	masterChannels: ['790501034182574101', '790503805175070720', '790501055804604456'],
+'use strict';
+
+exports = {
 	dateString: 'HHMM \'h\' d mmm yy',
 	databaseDelay: 1500,
-	embedColours: {
-		'available': 'GOLD',
-		'problems': 'RED',
-		'processing': 'BLUE',
-		'completed': 'GREEN',
-		'deleted': null,
+};
+
+exports.admin = {
+	ids: ['461320592717774848', '192181901065322496'],
+};
+
+exports.master = {
+	active: {
+		name: 'active-orders',
 	},
+	completed: {
+		name: 'completed-orders',
+	},
+	deleted: {
+		name: 'deleted-orders',
+	},
+	category: {
+		name: 'master',
+	},
+};
+
+exports.vendor = {
+	available: {
+		name: 'available',
+	},
+	problems: {
+		name: 'problems',
+	},
+	processing: {
+		name: 'processing',
+	},
+	completed: {
+		name: 'completed',
+	},
+	channels: {
+		names: ['available', 'problems', 'processing', 'completed'],
+	},
+};
+
+exports.emojis = {
+	onward: '✅',
+	problem: '❌',
+	comment: '💬',
+	reverse: '🔄',
+	edit: '📝',
+	delete: '🗑️',
+	vendor: ['📝', '🗑️'],
+};
+
+exports.embedColours = {
+	available: 'GOLD',
+	problems: 'RED',
+	processing: 'BLUE',
+	completed: 'GREEN',
+	deleted: '',
 };
