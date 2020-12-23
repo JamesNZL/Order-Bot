@@ -6,7 +6,7 @@ module.exports = async guild => {
 
 	if (!guild) return require('../config');
 
-	const database = await Config.findOne({ 'guild.ID': guild.id }, error => {
+	const database = await Config.findOne({ 'guild.id': guild.id }, error => {
 		if (error) console.error(error);
 	});
 
