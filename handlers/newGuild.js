@@ -1,5 +1,6 @@
 'use strict';
 
+const Discord = require('discord.js');
 const mongoose = require('mongoose');
 
 const Config = require('../models/config');
@@ -24,6 +25,37 @@ module.exports = async guild => {
 	const config = await createConfig(guild);
 
 	guild.members.cache.filter(member => !member.user.bot && !member.hasPermission('ADMINISTRATOR')).each(member => bot.emit('guildMemberAdd', member));
+
+	const informationEmbed = new Discord.MessageEmbed()
+		.setAuthor(bot.user.tag, bot.user.displayAvatarURL({ dynamic: true }))
+		.setColor('#1abc9c')
+		.setDescription(`**Hi! I'm ${bot.user}, a custom bot designed to make your life easier!**\n\u200b`)
+		.addField('Submitting a new order', `To submit a new order, send your formatted message to your **#${config.vendor.available.name}** channel.\n\nOrders being processed will be transferred into **#${config.vendor.processing.name}**, or into **#${config.vendor.problems.name}** if there is an issue.`, true)
+		.addField('Editing an active order', `It's super easy to amend orders!\n\nTo amend an active order, simply click the ${config.emojis.edit} reaction!\n\n*Note: I must be able to private message you!*`, true)
+		.addField('Deleting an order', `Orders can be deleted from **#${config.vendor.available.name}** before they're processed or from **#${config.vendor.problems.name}** if they're too hard to amend.\n\nTo delete an order, simply click the ${config.emojis.delete} reaction, and I'll do the rest!`, true);
+
+	const formatEmbed = new Discord.MessageEmbed()
+		.setColor('#1abc9c')
+		.setTitle('Order Format')
+		.setDescription('Here\'s a guideline for speedy processing:\n```Email: ______________________\nPassword: ___________________\nCharacter: __________________\nAccount name: _______________\nPayout: $____\n\nNotes: ______________________```')
+		.setFooter('Don\'t worry, I\'ll still work with any format!');
+
+	const informationChannel = bot.channels.cache.get(await findChannel('information', 'Order Bot', guild, true));
+
+	informationChannel.createOverwrite(guild.roles.everyone, { 'SEND_MESSAGES': false });
+
+	informationChannel.messages.fetch()
+		.then(msgs => {
+			if (!msgs.some(msg => msg.author.id === bot.user.id)) {
+				informationChannel.send(informationEmbed)
+					.then(async _msg => {
+						await _msg.react(config.emojis.edit);
+						await _msg.react(config.emojis.delete);
+					});
+
+				informationChannel.send(formatEmbed);
+			}
+		});
 
 	return config;
 };
@@ -59,7 +91,7 @@ const createConfig = async guild => {
 	return await config.save();
 };
 
-const findChannel = async (name, parent, guild) => {
+const findChannel = async (name, parent, guild, show) => {
 	const { bot } = require('../');
 	const { adminList } = require('./');
 
@@ -73,8 +105,12 @@ const findChannel = async (name, parent, guild) => {
 		await guild.channels.create(parent, { type: 'category' })
 			.then(async category => {
 				await category.createOverwrite(bot.user.id, { 'VIEW_CHANNEL': true });
-				await setChannelVisibility(category, [guild.roles.everyone], false);
-				await setChannelVisibility(category, adminList(guild), true);
+
+				if (!show) {
+					await setChannelVisibility(category, [guild.roles.everyone], false);
+					await setChannelVisibility(category, adminList(guild), true);
+				}
+
 				category.setPosition(0);
 				channelParent = category;
 			});
