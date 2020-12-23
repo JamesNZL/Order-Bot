@@ -4,8 +4,6 @@ const Discord = require('discord.js');
 const mongoose = require('mongoose');
 const Order = require('../models/order');
 
-const config = require('../config');
-
 const recentOrderSerials = new Set();
 const recentMasterSerials = new Set();
 const recentVendorSerials = new Set();
@@ -14,6 +12,7 @@ module.exports = async (bot, msg) => {
 	const orderSerial = await generateSerial(async () => await randomSerial('serial', msg.guild), recentOrderSerials, `${msg.guild.id}-`);
 	const masterSerial = await generateSerial(async () => calculateSerial(await findGreatest('master.serial', { 'guild.id': msg.guild.id }), 'master'), recentMasterSerials, `${msg.guild.id}-`);
 	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'guild.id': msg.guild.id, 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, `${msg.guild.id}-${msg.author.id}-`);
+	const config = await require('../handlers/database')(msg.guild);
 
 	const availableMessage = await msg.channel.send(messageToEmbed());
 	const masterMessage = await bot.channels.cache.get(config.master.active.id).send(messageToEmbed(true));
@@ -84,16 +83,16 @@ const calculateSerial = (latestOrder, path) => {
 	else return 1;
 };
 
-const generateSerial = async (generator, set, additions) => {
+const generateSerial = async (generator, set, additions, delay) => {
 	const serial = await generator();
 
-	if (set.has(`${additions}${serial}`)) return await generateSerial(generator, set, additions);
+	if (set.has(`${additions}${serial}`)) return await generateSerial(generator, set, additions, delay);
 
 	set.add(`${additions}${serial}`);
 
 	setTimeout(() => {
 		set.delete(`${additions}${serial}`);
-	}, config.databaseDelay);
+	}, delay);
 
 	return serial;
 };

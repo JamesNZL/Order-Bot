@@ -7,8 +7,6 @@ const { updateOrder } = require('../handlers');
 const { parseSerial } = require('../modules');
 const { forwardMaster } = require('./onReaction');
 
-const config = require('../config');
-
 module.exports = {
 	events: ['messageDelete'],
 	process: [],
@@ -31,6 +29,8 @@ module.exports = {
 				const order = vendorMatch || masterMatch;
 
 				if (!order) return;
+
+				const config = await require('../handlers/database')(bot.guilds.cache.get(order.guild.id));
 
 				msg = {
 					id: msg.id,
@@ -61,6 +61,8 @@ module.exports = {
 				processDeletion(bot, msg, order);
 			}, config.databaseDelay);
 		}
+
+		const config = await require('../handlers/database')(msg.guild);
 
 		if (msg.channel.id === config.master.deleted.id) return msg.channel.send(msg.embeds[0]);
 

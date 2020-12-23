@@ -24,6 +24,8 @@ module.exports = async guild => {
 	}, 10000);
 
 	const config = await createConfig(guild);
+
+	return config;
 };
 
 const createConfig = async guild => {

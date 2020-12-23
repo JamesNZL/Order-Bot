@@ -1,7 +1,6 @@
 'use strict';
 
 const Order = require('../models/order');
-const config = require('../config');
 
 const { adminList } = require('../handlers');
 
@@ -10,6 +9,7 @@ module.exports = {
 	process: [],
 	async execute(_, member) {
 		const { bot } = require('../');
+		const config = await require('../handlers/database')(member.guild);
 
 		if (member.user.bot) return;
 

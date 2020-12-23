@@ -1,7 +1,5 @@
 'use strict';
 
-const config = require('../config');
-
 const { newOrder, updateOrder } = require('../handlers');
 
 module.exports = {
@@ -9,6 +7,7 @@ module.exports = {
 	process: [],
 	async execute(_, msg) {
 		const { bot } = require('../');
+		const config = await require('../handlers/database')(msg.guild);
 
 		if (msg.partial) return;
 

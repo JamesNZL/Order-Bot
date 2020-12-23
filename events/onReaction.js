@@ -3,7 +3,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 
-const config = require('../config');
 const Order = require('../models/order');
 
 const { adminList, sendDM, updateOrder } = require('../handlers');
@@ -21,41 +20,43 @@ module.exports = {
 
 		if (reaction.partial) await reaction.fetch();
 
+		const config = await require('../handlers/database')(reaction.message.guild);
+
 		if (!adminList(reaction.message.guild).includes(user.id) && !config.emojis.vendor.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
 
 		switch (reaction.emoji.name) {
 
 		case config.emojis.onward: {
 			if (reaction.message.channel.name === config.vendor.available.name || reaction.message.channel.name === config.vendor.problems.name) {
-				processReaction(bot, reaction.message, config.vendor.processing.name, 'update', 'BLUE', true);
+				processReaction(bot, config, reaction.message, config.vendor.processing.name, 'update', 'BLUE', true);
 			}
 
-			else if (reaction.message.channel.name === config.vendor.processing.name) processReaction(bot, reaction.message, config.vendor.completed.name, 'completed', 'GREEN', true);
+			else if (reaction.message.channel.name === config.vendor.processing.name) processReaction(bot, config, reaction.message, config.vendor.completed.name, 'completed', 'GREEN', true);
 
 			break;
 		}
 
 		case config.emojis.comment: {
-			userInput(bot, user, reaction.message, 'Annotating', 'Comments');
+			userInput(bot, config, user, reaction.message, 'Annotating', 'Comments');
 			reaction.users.remove(user.id);
 			break;
 		}
 
 		case config.emojis.problem: {
-			processReaction(bot, reaction.message, config.vendor.problems.name, 'update', 'RED', true);
+			processReaction(bot, config, reaction.message, config.vendor.problems.name, 'update', 'RED', true);
 			break;
 		}
 
 		case config.emojis.reverse: {
-			if (reaction.message.channel.name === config.vendor.completed.name) processReaction(bot, reaction.message, config.vendor.processing.name, 'reverse', 'BLUE', true);
+			if (reaction.message.channel.name === config.vendor.completed.name) processReaction(bot, config, reaction.message, config.vendor.processing.name, 'reverse', 'BLUE', true);
 
-			else if (reaction.message.channel.name === config.vendor.processing.name) processReaction(bot, reaction.message, config.vendor.available.name, 'update', 'GOLD', true);
+			else if (reaction.message.channel.name === config.vendor.processing.name) processReaction(bot, config, reaction.message, config.vendor.available.name, 'update', 'GOLD', true);
 
 			break;
 		}
 
 		case config.emojis.edit: {
-			userInput(bot, user, reaction.message, 'Amending', 'Amendments');
+			userInput(bot, config, user, reaction.message, 'Amending', 'Amendments');
 			reaction.users.remove(user.id);
 			break;
 		}
@@ -63,15 +64,15 @@ module.exports = {
 		case config.emojis.delete: {
 			reaction.message.delete();
 			updateOrder(reaction.message, true);
-			forwardMaster(bot, reaction.message, 'delete');
+			forwardMaster(bot, config, reaction.message, 'delete');
 		}
 		}
 	},
 };
 
-const processReaction = async (bot, msg, newChannel, action, colour, remove) => {
+const processReaction = async (bot, config, msg, newChannel, action, colour, remove) => {
 	const _msg = await forwardToVendor(findVendorChannel(bot, msg, newChannel), msg, colour, remove);
-	forwardMaster(bot, _msg, action, colour);
+	forwardMaster(bot, config, _msg, action, colour);
 };
 
 const findVendorChannel = (bot, msg, name) => bot.channels.cache.find(channel => channel.parentID === msg.channel.parentID && channel.name === name);
@@ -81,7 +82,7 @@ const forwardToVendor = async (channel, msg, colour, remove) => {
 	return await channel.send(new Discord.MessageEmbed(msg.embeds[0]).setColor(colour));
 };
 
-const forwardMaster = async (bot, msg, action, colour) => {
+const forwardMaster = async (bot, config, msg, action, colour) => {
 	switch (action) {
 
 	case 'completed': {
@@ -125,7 +126,7 @@ const updateEmbed = (msg, colour, remove) => {
 	return embed;
 };
 
-const userInput = async (bot, user, msg, action, type) => {
+const userInput = async (bot, config, user, msg, action, type) => {
 	if (pendingInput.has(user.id)) return msg.channel.send(promptEmbed(`You're already ${action.toLowerCase()} another order!`, 'RED'));
 
 	const editingEmbed = new Discord.MessageEmbed()
@@ -168,7 +169,7 @@ const userInput = async (bot, user, msg, action, type) => {
 		return sendDM(user, cancelEmbed, msg.channel);
 	}
 
-	else processUpdate(bot, input, type, user, msg);
+	else processUpdate(bot, config, input, type, user, msg);
 };
 
 async function getInput(user, needed, channel) {
@@ -220,7 +221,7 @@ const promptEmbed = (prompt, colour) => new Discord.MessageEmbed()
 	.setDescription(prompt)
 	.setColor(colour || 'GOLD');
 
-const processUpdate = async (bot, input, type, user, msg) => {
+const processUpdate = async (bot, config, input, type, user, msg) => {
 	const updatedEmbed = new Discord.MessageEmbed(msg.embeds[0])
 		.setColor('GREEN')
 		.setTitle(`Updated ${msg.embeds[0].title}`);
@@ -237,7 +238,7 @@ const processUpdate = async (bot, input, type, user, msg) => {
 	updatedEmbed.setColor(msg.embeds[0].color);
 
 	const updatedMessage = await msg.edit(updatedEmbed);
-	forwardMaster(bot, updatedMessage, 'update', msg.embeds[0].color);
+	forwardMaster(bot, config, updatedMessage, 'update', msg.embeds[0].color);
 
 	pendingInput.delete(user.id);
 
