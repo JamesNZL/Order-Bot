@@ -31,6 +31,17 @@ module.exports = {
 
 		}
 
+		else {
+			const matchingName = member.guild.channels.cache.find(channel => channel.type === 'category' && channel.name === member.user.tag);
+
+			if (matchingName) {
+				matchingName.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
+				matchingName.children.each(channel => channel.createOverwrite(member.id, { 'VIEW_CHANNEL': true }));
+
+				return;
+			}
+		}
+
 		await member.guild.channels.create(member.user.tag, { type: 'category' })
 			.then(async category => {
 				await category.createOverwrite(bot.user.id, { 'VIEW_CHANNEL': true });
