@@ -8,11 +8,13 @@ const recentOrderSerials = new Set();
 const recentMasterSerials = new Set();
 const recentVendorSerials = new Set();
 
-module.exports = async (bot, msg) => {
-	const orderSerial = await generateSerial(async () => await randomSerial('serial', msg.guild), recentOrderSerials, `${msg.guild.id}-`);
-	const masterSerial = await generateSerial(async () => calculateSerial(await findGreatest('master.serial', { 'guild.id': msg.guild.id }), 'master'), recentMasterSerials, `${msg.guild.id}-`);
-	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'guild.id': msg.guild.id, 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, `${msg.guild.id}-${msg.author.id}-`);
+module.exports = async msg => {
+	const { bot } = require('../');
 	const config = await require('../handlers/database')(msg.guild);
+
+	const orderSerial = await generateSerial(async () => await randomSerial('serial', msg.guild), recentOrderSerials, `${msg.guild.id}-`, config.databaseDelay);
+	const masterSerial = await generateSerial(async () => calculateSerial(await findGreatest('master.serial', { 'guild.id': msg.guild.id }), 'master'), recentMasterSerials, `${msg.guild.id}-`, config.databaseDelay);
+	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'guild.id': msg.guild.id, 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, `${msg.guild.id}-${msg.author.id}-`, config.databaseDelay);
 
 	const availableMessage = await msg.channel.send(messageToEmbed());
 	const masterMessage = await bot.channels.cache.get(config.master.active.id).send(messageToEmbed(true));
