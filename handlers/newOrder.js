@@ -6,36 +6,21 @@ const Order = require('../models/order');
 
 const config = require('../config');
 
+const recentOrderSerials = new Set();
 const recentMasterSerials = new Set();
 const recentVendorSerials = new Set();
 
 module.exports = async (bot, msg) => {
-	let masterSerial, vendorSerial;
-
-	try {
-		masterSerial = await randomSerial('serial');
-		vendorSerial = calculateSerial(await findGreatest('vendor.serial', { 'vendor.id': msg.author.id }), 'vendor');
-
-		if (recentMasterSerials.has(masterSerial)) masterSerial++;
-		if (recentVendorSerials.has(`${msg.author.id}-${vendorSerial}`)) vendorSerial++;
-
-		recentMasterSerials.add(masterSerial);
-		recentVendorSerials.add(`${msg.author.id}-${vendorSerial}`);
-
-		setTimeout(() => {
-			recentMasterSerials.delete(masterSerial);
-			recentVendorSerials.delete(`${msg.author.id}-${vendorSerial}`);
-		}, 10000);
-	}
-
-	catch (error) { console.error(error); }
+	const orderSerial = await generateSerial(async () => await randomSerial('serial'), recentOrderSerials);
+	const masterSerial = await generateSerial(async () => calculateSerial(await findGreatest('master.serial'), 'master'), recentMasterSerials);
+	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, msg.author.id);
 
 	const availableMessage = await msg.channel.send(messageToEmbed());
 	const masterMessage = await bot.channels.cache.get(config.masterOrdersID).send(messageToEmbed(true));
 
 	const order = await new Order({
 		_id: mongoose.Types.ObjectId(),
-		serial: masterSerial,
+		serial: orderSerial,
 		details: msg.content,
 		time: Date.now(),
 		vendor: {
@@ -63,7 +48,7 @@ module.exports = async (bot, msg) => {
 	function messageToEmbed(url) {
 		const embed = new Discord.MessageEmbed()
 			.setColor('GOLD')
-			.setTitle(`Order #${masterSerial}`)
+			.setTitle(`Order #${orderSerial}`)
 			.setAuthor(msg.member.displayName, msg.author.displayAvatarURL({ dynamic: true }))
 			.setDescription(msg.content)
 			.setTimestamp();
@@ -87,4 +72,18 @@ const findGreatest = async (field, options) => await Order.find(options).sort({ 
 const calculateSerial = (latestOrder, path) => {
 	if (latestOrder.length) return latestOrder[0][path].serial + 1;
 	else return 1;
+};
+
+const generateSerial = async (generator, set, additions) => {
+	const serial = await generator();
+
+	if (set.has(`${additions}${serial}`)) return await generateSerial(generator, set, additions);
+
+	set.add(`${additions}${serial}`);
+
+	setTimeout(() => {
+		set.delete(`${additions}${serial}`);
+	}, config.databaseDelay);
+
+	return serial;
 };
