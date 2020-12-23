@@ -58,7 +58,7 @@ module.exports = {
 					msg.embeds[0].addField('Order Link', `[Vendor Message](${order.vendor.message.url})`);
 				}
 
-				processDeletion(bot, msg, order);
+				processDeletion(bot, config, msg, order);
 			}, config.databaseDelay);
 		}
 
@@ -77,19 +77,19 @@ module.exports = {
 
 			if (target.id === msg.author.id && executor.id !== bot.user.id && msg.embeds[0] && msg.embeds[0].title.includes('Order')) {
 				setTimeout(async () => {
-					processDeletion(bot, msg, await Order.findOne({ 'guild.id': msg.guild.id, 'serial': parseSerial(msg) }));
+					processDeletion(bot, config, msg, await Order.findOne({ 'guild.id': msg.guild.id, 'serial': parseSerial(msg) }));
 				}, config.databaseDelay);
 			}
 		}
 	},
 };
 
-const processDeletion = (bot, msg, order) => {
+const processDeletion = (bot, config, msg, order) => {
 	if (!order) return;
 
 	checkApparentMessage(bot, order, 'vendor', () => {
 		updateOrder(msg, true);
-		forwardMaster(bot, msg, 'delete');
+		forwardMaster(bot, config, msg, 'delete');
 	});
 
 	checkApparentMessage(bot, order, 'master', () => msg.channel.send(msg.embeds[0]));
