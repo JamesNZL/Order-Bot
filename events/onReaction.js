@@ -231,7 +231,7 @@ const processUpdate = async (bot, input, type, user, msg) => {
 		? updatedEmbed.fields[existingIndex].value += `\n${dateFormat(config.dateString)} — ${input[type.toLowerCase()]}`
 		: updatedEmbed.addField(type, `\n${dateFormat(config.dateString)} — ${input[type.toLowerCase()]}`);
 
-	await sendDM(user, new Discord.MessageEmbed(updatedEmbed).addField('Order Link', `[Order Message](${msg.url})`), msg.channel);
+	await sendDM(user, new Discord.MessageEmbed(updatedEmbed).addField('Order Link', `[Order Message](${msg.url})`).setTimestamp(), msg.channel);
 
 	updatedEmbed.setTitle(msg.embeds[0].title);
 	updatedEmbed.setColor(msg.embeds[0].color);
