@@ -1,5 +1,6 @@
 'use strict';
 
+const Order = require('../models/order');
 const config = require('../config');
 
 module.exports = {
@@ -8,9 +9,21 @@ module.exports = {
 	async execute(_, member) {
 		const { bot } = require('../');
 
-		const existingCategory = findCategory(member.guild, member.user.tag);
+		const vendorOrder = await Order.findOne({ 'vendor.id': member.id });
 
-		if (existingCategory) existingCategory.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
+		if (vendorOrder) {
+			const existingCategory = findCategory(member.guild, vendorOrder.vendor.category);
+
+			if (existingCategory) {
+				if (existingCategory.name !== member.user.tag) existingCategory.edit({ name: member.user.tag });
+
+				existingCategory.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
+				existingCategory.children.each(channel => channel.createOverwrite(member.id, { 'VIEW_CHANNEL': true }));
+
+				return;
+			}
+
+		}
 
 		await member.guild.channels.create(member.user.tag, { type: 'category' })
 			.then(async category => {
@@ -24,7 +37,7 @@ module.exports = {
 };
 
 
-const findCategory = (guild, name) => guild.channels.cache.find(channel => channel.type === 'category' && channel.name === name);
+const findCategory = (guild, id) => guild.channels.cache.find(channel => channel.type === 'category' && channel.id === id);
 
 const setChannelVisibility = async (channel, users, show) => await users.forEach(user => channel.createOverwrite(user, { 'VIEW_CHANNEL': show }));
 
