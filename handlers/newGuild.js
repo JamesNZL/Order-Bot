@@ -1,7 +1,3 @@
-// create master channels
-// create vendor role
-// for guild memnber not a bot and not admin.ids and not has perm admin, create vendor channels
-
 'use strict';
 
 const mongoose = require('mongoose');
