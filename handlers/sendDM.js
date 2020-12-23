@@ -2,6 +2,8 @@
 
 const Discord = require('discord.js');
 
+const recentErrors = new Set();
+
 module.exports = (user, msg, channel) => {
 	const { bot } = require('../');
 
@@ -16,6 +18,14 @@ module.exports = (user, msg, channel) => {
 				.addField('More Information', support)
 				.setTimestamp();
 
+			if (recentErrors.has(user.id)) return;
+
 			channel.send(errorEmbed);
+
+			recentErrors.add(user.id);
+
+			setTimeout(() => {
+				recentErrors.delete(user.id);
+			}, 1000);
 		});
 };
