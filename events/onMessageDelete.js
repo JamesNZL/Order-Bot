@@ -75,7 +75,7 @@ module.exports = {
 
 			if (target.id === msg.author.id && executor.id !== bot.user.id && msg.embeds[0] && msg.embeds[0].title.includes('Order')) {
 				setTimeout(async () => {
-					processDeletion(bot, msg, await Order.findOne({ 'serial': parseSerial(msg) }));
+					processDeletion(bot, msg, await Order.findOne({ 'guild.id': msg.guild.id, 'serial': parseSerial(msg) }));
 				}, config.databaseDelay);
 			}
 		}

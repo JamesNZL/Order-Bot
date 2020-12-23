@@ -9,7 +9,7 @@ module.exports = {
 	async execute(_, member) {
 		const { bot } = require('../');
 
-		const vendorOrder = await Order.findOne({ 'vendor.id': member.id });
+		const vendorOrder = await Order.findOne({ 'guild.id': member.guild.id, 'vendor.id': member.id });
 
 		if (vendorOrder) {
 			const existingCategory = findCategory(member.guild, vendorOrder.vendor.category);

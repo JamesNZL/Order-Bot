@@ -18,14 +18,14 @@ module.exports = (user, msg, channel) => {
 				.addField('More Information', support)
 				.setTimestamp();
 
-			if (recentErrors.has(user.id)) return;
+			if (recentErrors.has(`${msg.guild.id}-${user.id}`)) return;
 
 			channel.send(errorEmbed);
 
-			recentErrors.add(user.id);
+			recentErrors.add(`${msg.guild.id}-${user.id}`);
 
 			setTimeout(() => {
-				recentErrors.delete(user.id);
+				recentErrors.delete(`${msg.guild.id}-${user.id}`);
 			}, 1000);
 		});
 };

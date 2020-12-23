@@ -11,15 +11,19 @@ const recentMasterSerials = new Set();
 const recentVendorSerials = new Set();
 
 module.exports = async (bot, msg) => {
-	const orderSerial = await generateSerial(async () => await randomSerial('serial'), recentOrderSerials);
-	const masterSerial = await generateSerial(async () => calculateSerial(await findGreatest('master.serial'), 'master'), recentMasterSerials);
-	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, msg.author.id);
+	const orderSerial = await generateSerial(async () => await randomSerial('serial', msg.guild), recentOrderSerials, `${msg.guild.id}-`);
+	const masterSerial = await generateSerial(async () => calculateSerial(await findGreatest('master.serial', { 'guild.id': msg.guild.id }), 'master'), recentMasterSerials, `${msg.guild.id}-`);
+	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'guild.id': msg.guild.id, 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, `${msg.guild.id}-${msg.author.id}-`);
 
 	const availableMessage = await msg.channel.send(messageToEmbed());
 	const masterMessage = await bot.channels.cache.get(config.masterOrdersID).send(messageToEmbed(true));
 
 	const order = await new Order({
 		_id: mongoose.Types.ObjectId(),
+		guild: {
+			id: msg.guild.id,
+			name: msg.guild.name,
+		},
 		serial: orderSerial,
 		details: msg.content,
 		time: Date.now(),
@@ -65,11 +69,11 @@ module.exports = async (bot, msg) => {
 	}
 };
 
-const randomSerial = async field => {
+const randomSerial = async (field, guild) => {
 	const generatedSerial = Number(('' + Math.random()).substring(2, 7));
-	const existingSerial = await Order.findOne({ [field]: generatedSerial }).exec();
+	const existingSerial = await Order.findOne({ 'guild.id': guild.id, [field]: generatedSerial }).exec();
 
-	if (existingSerial) return randomSerial(field);
+	if (existingSerial) return randomSerial(field, guild);
 	else return generatedSerial;
 };
 

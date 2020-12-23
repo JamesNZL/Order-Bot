@@ -5,7 +5,7 @@ const Order = require('../models/order');
 const { parseSerial } = require('../modules');
 
 module.exports = async (msg, deleted) => {
-	const order = await Order.findOne({ 'serial': parseSerial(msg) }, error => {
+	const order = await Order.findOne({ 'guild.id': msg.guild.id, 'serial': parseSerial(msg) }, error => {
 		if (error) console.error(error);
 	});
 
