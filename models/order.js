@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
+	guild: {
+		id: String,
+		name: String,
+	},
 	serial: Number,
 	details: String,
 	comments: { type: String, default: '' },
