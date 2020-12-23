@@ -15,6 +15,8 @@ module.exports = {
 
 		if (!msg.partial && !msg.author.bot) return;
 
+		let config = await require('../handlers/database')(msg.guild);
+
 		if (msg.partial) {
 			return setTimeout(async () => {
 				const vendorMatch = await Order.findOne({ 'vendor.message.id': msg.id });
@@ -30,7 +32,7 @@ module.exports = {
 
 				if (!order) return;
 
-				const config = await require('../handlers/database')(bot.guilds.cache.get(order.guild.id));
+				config = await require('../handlers/database')(bot.guilds.cache.get(order.guild.id));
 
 				msg = {
 					id: msg.id,
@@ -61,8 +63,6 @@ module.exports = {
 				processDeletion(bot, config, msg, order);
 			}, config.databaseDelay);
 		}
-
-		const config = await require('../handlers/database')(msg.guild);
 
 		if (msg.channel.id === config.master.deleted.id) return msg.channel.send(msg.embeds[0]);
 
