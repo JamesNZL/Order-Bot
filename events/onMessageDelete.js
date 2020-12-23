@@ -52,9 +52,9 @@ module.exports = {
 					if (order[field.toLowerCase()]) msg.embeds[0].addField(field, order[field.toLowerCase()]);
 				});
 
-				if (msg.channel.id === config.masterDeletedID) return msg.channel.send(msg.embeds[0]);
+				if (msg.channel.id === config.master.deleted.id) return msg.channel.send(msg.embeds[0]);
 
-				else if (config.masterChannels.includes(msg.channel.id)) {
+				else if (config.master.channels.ids.includes(msg.channel.id)) {
 					msg.embeds[0].addField('Order Link', `[Vendor Message](${order.vendor.message.url})`);
 				}
 
@@ -62,7 +62,7 @@ module.exports = {
 			}, config.databaseDelay);
 		}
 
-		if (msg.channel.id === config.masterDeletedID) return msg.channel.send(msg.embeds[0]);
+		if (msg.channel.id === config.master.deleted.id) return msg.channel.send(msg.embeds[0]);
 
 		const fetchedLogs = await msg.guild.fetchAuditLogs({ limit: 1, type: 'MESSAGE_DELETE' });
 

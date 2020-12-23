@@ -29,9 +29,9 @@ module.exports = {
 			.then(async category => {
 				await category.createOverwrite(bot.user.id, { 'VIEW_CHANNEL': true });
 				await setChannelVisibility(category, [member.guild.roles.everyone], false);
-				await setChannelVisibility(category, [member.id, ...config.adminIDs], true);
+				await setChannelVisibility(category, [member.id, ...config.admin.ids], true);
 
-				createChannels(member.guild, [config.availableName, config.problemsName, config.processingName, config.completedName], category);
+				createChannels(member.guild, [config.vendor.available.name, config.vendor.problems.name, config.vendor.processing.name, config.vendor.completed.name], category);
 			});
 	},
 };

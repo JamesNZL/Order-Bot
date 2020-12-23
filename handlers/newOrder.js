@@ -16,7 +16,7 @@ module.exports = async (bot, msg) => {
 	const vendorSerial = await generateSerial(async () => calculateSerial(await findGreatest('vendor.serial', { 'guild.id': msg.guild.id, 'vendor.id': msg.author.id }), 'vendor'), recentVendorSerials, `${msg.guild.id}-${msg.author.id}-`);
 
 	const availableMessage = await msg.channel.send(messageToEmbed());
-	const masterMessage = await bot.channels.cache.get(config.masterOrdersID).send(messageToEmbed(true));
+	const masterMessage = await bot.channels.cache.get(config.master.active.id).send(messageToEmbed(true));
 
 	const order = await new Order({
 		_id: mongoose.Types.ObjectId(),

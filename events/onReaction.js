@@ -21,46 +21,46 @@ module.exports = {
 
 		if (reaction.partial) await reaction.fetch();
 
-		if (!config.adminIDs.includes(user.id) && !config.vendorEmojis.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
+		if (!config.admin.ids.includes(user.id) && !config.emojis.vendor.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
 
 		switch (reaction.emoji.name) {
 
-		case config.completedEmoji: {
-			if (reaction.message.channel.name === config.availableName || reaction.message.channel.name === config.problemsName) {
-				processReaction(bot, reaction.message, config.processingName, 'update', 'BLUE', true);
+		case config.emojis.onward: {
+			if (reaction.message.channel.name === config.vendor.available.name || reaction.message.channel.name === config.vendor.problems.name) {
+				processReaction(bot, reaction.message, config.vendor.processing.name, 'update', 'BLUE', true);
 			}
 
-			else if (reaction.message.channel.name === config.processingName) processReaction(bot, reaction.message, config.completedName, 'completed', 'GREEN', true);
+			else if (reaction.message.channel.name === config.vendor.processing.name) processReaction(bot, reaction.message, config.vendor.completed.name, 'completed', 'GREEN', true);
 
 			break;
 		}
 
-		case config.noticeEmoji: {
+		case config.emojis.comment: {
 			userInput(bot, user, reaction.message, 'Annotating', 'Comments');
 			reaction.users.remove(user.id);
 			break;
 		}
 
-		case config.problemEmoji: {
-			processReaction(bot, reaction.message, config.problemsName, 'update', 'RED', true);
+		case config.emojis.problem: {
+			processReaction(bot, reaction.message, config.vendor.problems.name, 'update', 'RED', true);
 			break;
 		}
 
-		case config.reverseEmoji: {
-			if (reaction.message.channel.name === config.completedName) processReaction(bot, reaction.message, config.processingName, 'reverse', 'BLUE', true);
+		case config.emojis.reverse: {
+			if (reaction.message.channel.name === config.vendor.completed.name) processReaction(bot, reaction.message, config.vendor.processing.name, 'reverse', 'BLUE', true);
 
-			else if (reaction.message.channel.name === config.processingName) processReaction(bot, reaction.message, config.availableName, 'update', 'GOLD', true);
+			else if (reaction.message.channel.name === config.vendor.processing.name) processReaction(bot, reaction.message, config.vendor.available.name, 'update', 'GOLD', true);
 
 			break;
 		}
 
-		case config.editEmoji: {
+		case config.emojis.edit: {
 			userInput(bot, user, reaction.message, 'Amending', 'Amendments');
 			reaction.users.remove(user.id);
 			break;
 		}
 
-		case config.deleteEmoji: {
+		case config.emojis.delete: {
 			reaction.message.delete();
 			updateOrder(reaction.message, true);
 			forwardMaster(bot, reaction.message, 'delete');
@@ -85,17 +85,17 @@ const forwardMaster = async (bot, msg, action, colour) => {
 	switch (action) {
 
 	case 'completed': {
-		processMaster(bot, msg, config.masterCompletedID);
+		processMaster(bot, msg, config.master.completed.id);
 		break;
 	}
 
 	case 'reverse': {
-		processMaster(bot, msg, config.masterOrdersID);
+		processMaster(bot, msg, config.master.active.id);
 		break;
 	}
 
 	case 'delete': {
-		processMaster(bot, msg, config.masterDeletedID, true);
+		processMaster(bot, msg, config.master.deleted.id, true);
 		break;
 	}
 

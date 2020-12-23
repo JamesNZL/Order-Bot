@@ -12,30 +12,30 @@ module.exports = {
 
 		if (msg.partial) return;
 
-		if (!msg.embeds[0] && msg.channel.name === config.availableName) {
+		if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
 			msg.delete();
 			return newOrder(bot, msg);
 		}
 
-		else if (msg.author.id === bot.user.id && (config.vendorChannels.includes(msg.channel.name) || config.masterChannels.includes(msg.channel.id)) && msg.embeds[0].title && msg.embeds[0].title.includes('Order')) {
+		else if (msg.author.id === bot.user.id && (config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id)) && msg.embeds[0].title && msg.embeds[0].title.includes('Order')) {
 			updateOrder(msg);
 
 			switch (msg.channel.name) {
 
-			case config.availableName: {
-				applyReactions(msg, [config.completedEmoji, config.problemEmoji, config.editEmoji, config.deleteEmoji]);
+			case config.vendor.available.name: {
+				applyReactions(msg, [config.emojis.onward, config.emojis.problem, config.emojis.edit, config.emojis.delete]);
 				break;
 			}
-			case config.problemsName: {
-				applyReactions(msg, [config.noticeEmoji, config.completedEmoji, config.editEmoji, config.deleteEmoji]);
+			case config.vendor.problems.name: {
+				applyReactions(msg, [config.emojis.comment, config.emojis.onward, config.emojis.edit, config.emojis.delete]);
 				break;
 			}
-			case config.processingName: {
-				applyReactions(msg, [config.completedEmoji, config.problemEmoji, config.reverseEmoji, config.editEmoji]);
+			case config.vendor.processing.name: {
+				applyReactions(msg, [config.emojis.onward, config.emojis.problem, config.emojis.reverse, config.emojis.edit]);
 				break;
 			}
-			case config.completedName: {
-				applyReactions(msg, [config.reverseEmoji]);
+			case config.vendor.completed.name: {
+				applyReactions(msg, [config.emojis.reverse]);
 			}
 			}
 		}
