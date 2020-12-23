@@ -17,29 +17,17 @@ module.exports = {
 
 		const vendorOrder = await Order.findOne({ 'guild.id': member.guild.id, 'vendor.id': member.id });
 
-		if (vendorOrder) {
-			const existingCategory = findCategory(member.guild, vendorOrder.vendor.category);
+		const existingCategory = (vendorOrder)
+			? member.guild.channels.cache.find(channel => channel.type === 'category' && channel.id === vendorOrder.vendor.category)
+			: member.guild.channels.cache.find(channel => channel.type === 'category' && channel.name === member.user.tag);
 
-			if (existingCategory) {
-				if (existingCategory.name !== member.user.tag) existingCategory.edit({ name: member.user.tag });
+		if (existingCategory) {
+			if (existingCategory.name !== member.user.tag) existingCategory.edit({ name: member.user.tag });
 
-				existingCategory.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
-				existingCategory.children.each(channel => channel.createOverwrite(member.id, { 'VIEW_CHANNEL': true }));
+			existingCategory.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
+			existingCategory.children.each(channel => channel.createOverwrite(member.id, { 'VIEW_CHANNEL': true }));
 
-				return;
-			}
-
-		}
-
-		else {
-			const matchingName = member.guild.channels.cache.find(channel => channel.type === 'category' && channel.name === member.user.tag);
-
-			if (matchingName) {
-				matchingName.createOverwrite(member.id, { 'VIEW_CHANNEL': true });
-				matchingName.children.each(channel => channel.createOverwrite(member.id, { 'VIEW_CHANNEL': true }));
-
-				return;
-			}
+			return;
 		}
 
 		await member.guild.channels.create(member.user.tag, { type: 'category' })
@@ -52,9 +40,6 @@ module.exports = {
 			});
 	},
 };
-
-
-const findCategory = (guild, id) => guild.channels.cache.find(channel => channel.type === 'category' && channel.id === id);
 
 const setChannelVisibility = async (channel, users, show) => await users.forEach(user => channel.createOverwrite(user, { 'VIEW_CHANNEL': show }));
 
