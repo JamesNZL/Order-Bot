@@ -102,7 +102,7 @@ const forwardMaster = async (bot, msg, action, colour) => {
 	case 'update': {
 		const order = await Order.findOne({ 'serial': parseSerial(msg) });
 
-		bot.channels.cache.get(order.master.message.channel).messages.fetch(order.master.message.id).then(_msg => {
+		bot.channels.cache.get(order.master.message.channel.id).messages.fetch(order.master.message.id).then(_msg => {
 			_msg.edit(updateEmbed(msg, colour));
 		});
 	}
@@ -113,7 +113,7 @@ const processMaster = async (bot, msg, newChannel, remove) => {
 	const order = await Order.findOne({ 'serial': parseSerial(msg) });
 
 	bot.channels.cache.get(newChannel).send(updateEmbed(msg, null, remove));
-	bot.channels.cache.get(order.master.message.channel).messages.fetch(order.master.message.id).then(_msg => _msg.delete()).catch(() => null);
+	bot.channels.cache.get(order.master.message.channel.id).messages.fetch(order.master.message.id).then(_msg => _msg.delete()).catch(() => null);
 };
 
 const updateEmbed = (msg, colour, remove) => {

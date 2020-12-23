@@ -30,7 +30,10 @@ module.exports = async (bot, msg) => {
 			message: {
 				id: availableMessage.id,
 				url: availableMessage.url,
-				channel: availableMessage.channel.id,
+				channel: {
+					id: availableMessage.channel.id,
+					name: availableMessage.channel.name,
+				},
 			},
 		},
 		master: {
@@ -38,7 +41,10 @@ module.exports = async (bot, msg) => {
 			message: {
 				id: masterMessage.id,
 				url: masterMessage.url,
-				channel: masterMessage.channel.id,
+				channel: {
+					id: masterMessage.channel.id,
+					name: masterMessage.channel.name,
+				},
 			},
 		},
 	});

@@ -18,7 +18,10 @@ const orderSchema = mongoose.Schema({
 		message: {
 			id: String,
 			url: String,
-			channel: String,
+			channel: {
+				id: String,
+				name: String,
+			},
 		},
 	},
 	master: {
@@ -26,7 +29,10 @@ const orderSchema = mongoose.Schema({
 		message: {
 			id: String,
 			url: String,
-			channel: String,
+			channel: {
+				id: String,
+				name: String,
+			},
 		},
 	},
 });

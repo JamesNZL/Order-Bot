@@ -19,11 +19,13 @@ module.exports = async (msg, deleted) => {
 const updateField = (order, msg, field) => {
 	order[field].message.id = msg.id;
 	order[field].message.url = msg.url;
-	order[field].message.channel = msg.channel.id;
+	order[field].message.channel.id = msg.channel.id;
+	order[field].message.channel.name = msg.channel.name;
 
 	order.markModified(`${field}.message.id`);
 	order.markModified(`${field}.message.url`);
-	order.markModified(`${field}.message.channel`);
+	order.markModified(`${field}.message.channel.id`);
+	order.markModified(`${field}.message.channel.name`);
 
 	if (field === 'vendor') {
 		order.state = msg.channel.name;
