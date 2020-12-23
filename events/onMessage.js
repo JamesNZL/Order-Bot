@@ -9,14 +9,24 @@ module.exports = {
 		const { bot } = require('../');
 		const config = await require('../handlers/database')(msg.guild);
 
-		if (msg.partial) return;
+		if (msg.partial || !msg.guild) return;
+
+		const isOrderEmbed = (msg.embeds[0])
+			? (msg.embeds[0].title)
+				? (msg.embeds[0].title.includes('Order'))
+					? true
+					: false
+				: false
+			: false;
+
+		const isOrderChannel = config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id);
 
 		if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
 			msg.delete();
-			return newOrder(bot, msg);
+			return newOrder(msg);
 		}
 
-		else if (msg.author.id === bot.user.id && (config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id)) && msg.embeds[0].title && msg.embeds[0].title.includes('Order')) {
+		else if (msg.author.id === bot.user.id && isOrderChannel && isOrderEmbed) {
 			updateOrder(msg);
 
 			switch (msg.channel.name) {
