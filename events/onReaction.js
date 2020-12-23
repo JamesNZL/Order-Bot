@@ -24,6 +24,8 @@ module.exports = {
 
 		if (!adminList(reaction.message.guild).includes(user.id) && !config.emojis.vendor.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
 
+		if (!await Order.findOne({ 'vendor.message.id': reaction.message.id }) || !await Order.findOne({ 'master.message.id': reaction.message.id })) return reaction.users.remove(user.id);
+
 		switch (reaction.emoji.name) {
 
 		case config.emojis.onward: {
