@@ -12,6 +12,8 @@ const { master, vendor } = require('../config');
 const recentlyCreated = new Set();
 
 module.exports = async guild => {
+	const { bot } = require('../');
+
 	const existingConfig = await Config.findOne({ 'guild.id': guild.id });
 
 	if (existingConfig) return existingConfig;
@@ -24,6 +26,8 @@ module.exports = async guild => {
 	}, 10000);
 
 	const config = await createConfig(guild);
+
+	guild.members.cache.filter(member => !member.user.bot && !member.hasPermission('ADMINISTRATOR')).each(member => bot.emit('guildMemberAdd', member));
 
 	return config;
 };
