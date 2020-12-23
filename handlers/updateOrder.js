@@ -22,10 +22,7 @@ const updateField = (order, msg, field) => {
 	order[field].message.channel.id = msg.channel.id;
 	order[field].message.channel.name = msg.channel.name;
 
-	order.markModified(`${field}.message.id`);
-	order.markModified(`${field}.message.url`);
-	order.markModified(`${field}.message.channel.id`);
-	order.markModified(`${field}.message.channel.name`);
+	[`${field}.message.id`, `${field}.message.url`, `${field}.message.channel.id`, `${field}.message.channel.name`].forEach(_field => order.markModified(_field));
 
 	if (field === 'vendor') {
 		order.state = msg.channel.name;
