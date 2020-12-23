@@ -1,9 +1,8 @@
 'use strict';
 
-exports = {
-	dateString: 'HHMM \'h\' d mmm yy',
-	databaseDelay: 1500,
-};
+
+exports.dateString = 'HHMM \'h\' d mmm yy',
+exports.databaseDelay = 1500;
 
 exports.master = {
 	active: {
