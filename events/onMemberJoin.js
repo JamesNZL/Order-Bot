@@ -9,6 +9,10 @@ module.exports = {
 	async execute(_, member) {
 		const { bot } = require('../');
 
+		if (member.user.bot) return;
+
+		member.roles.add(config.vendor.role.id);
+
 		const vendorOrder = await Order.findOne({ 'guild.id': member.guild.id, 'vendor.id': member.id });
 
 		if (vendorOrder) {

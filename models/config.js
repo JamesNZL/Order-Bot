@@ -45,6 +45,9 @@ const configSchema = mongoose.Schema({
 		channels: {
 			names: { type: Array, default: config.vendor.channels.names },
 		},
+		role: {
+			id: String,
+			name: { type: String, default: config.vendor.role.name },
 		},
 	},
 	emojis: {

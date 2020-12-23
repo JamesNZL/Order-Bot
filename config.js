@@ -40,6 +40,9 @@ exports.vendor = {
 	channels: {
 		names: ['available', 'problems', 'processing', 'completed'],
 	},
+	role: {
+		name: 'Vendor',
+	},
 };
 
 exports.emojis = {
