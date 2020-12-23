@@ -128,8 +128,6 @@ const updateEmbed = (msg, colour, remove) => {
 const userInput = async (bot, user, msg, action, type) => {
 	if (pendingInput.has(user.id)) return msg.channel.send(promptEmbed(`You're already ${action.toLowerCase()} another order!`, 'RED'));
 
-	pendingInput.add(user.id);
-
 	const editingEmbed = new Discord.MessageEmbed()
 		.setTitle(`${action} Order #${parseSerial(msg)}...`)
 		.setAuthor(user.tag, user.displayAvatarURL({ dynamic: true }))
@@ -143,7 +141,11 @@ const userInput = async (bot, user, msg, action, type) => {
 		if (foundField) editingEmbed.addField(field, foundField.value);
 	});
 
-	sendDM(user, editingEmbed.addField('Order Link', `[Order Message](${msg.url})`), msg.channel);
+	const dm = await sendDM(user, editingEmbed.addField('Order Link', `[Order Message](${msg.url})`), msg.channel);
+
+	if (!dm) return;
+
+	pendingInput.add(user.id);
 
 	const neededInputs = {
 		[type.toLowerCase()]: {
