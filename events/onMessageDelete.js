@@ -40,7 +40,7 @@ module.exports = {
 						title: `Order #${order.serial}`,
 						description: order.details,
 						color: config.embedColours[order.state],
-						timestamp: Date.now(),
+						timestamp: order.time,
 						author: {
 							name: bot.channels.cache.get(findMatch('channel')).guild.members.cache.get(order.vendor.id).displayName,
 							iconURL: bot.users.cache.get(order.vendor.id).displayAvatarURL({ dynamic: true }),
