@@ -38,6 +38,7 @@ exports.vendor = {
 	},
 	role: {
 		name: 'Vendor',
+		permissions: 104189441,
 	},
 };
 
