@@ -1,6 +1,7 @@
 'use strict';
 
 const { newOrder, updateOrder } = require('../handlers');
+const { isOrderEmbed } = require('../modules');
 
 module.exports = {
 	events: ['message'],
@@ -11,14 +12,6 @@ module.exports = {
 
 		if (msg.partial || !msg.guild) return;
 
-		const isOrderEmbed = (msg.embeds[0])
-			? (msg.embeds[0].title)
-				? (msg.embeds[0].title.includes('Order'))
-					? true
-					: false
-				: false
-			: false;
-
 		const isOrderChannel = config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id);
 
 		if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
@@ -26,7 +19,7 @@ module.exports = {
 			return newOrder(msg);
 		}
 
-		else if (msg.author.id === bot.user.id && isOrderChannel && isOrderEmbed) {
+		else if (msg.author.id === bot.user.id && isOrderChannel && isOrderEmbed(msg)) {
 			updateOrder(msg);
 
 			switch (msg.channel.name) {

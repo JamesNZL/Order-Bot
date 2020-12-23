@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const Order = require('../models/order');
 
 const { updateOrder } = require('../handlers');
-const { parseSerial } = require('../modules');
+const { isOrderEmbed, parseSerial } = require('../modules');
 const { forwardMaster } = require('./onReaction');
 
 module.exports = {
@@ -75,7 +75,7 @@ module.exports = {
 		if (deletionLog) {
 			const { executor, target } = deletionLog;
 
-			if (target.id === msg.author.id && executor.id !== bot.user.id && msg.embeds[0] && msg.embeds[0].title.includes('Order')) {
+			if (target.id === msg.author.id && executor.id !== bot.user.id && isOrderEmbed(msg)) {
 				setTimeout(async () => {
 					processDeletion(bot, config, msg, await Order.findOne({ 'guild.id': msg.guild.id, 'serial': parseSerial(msg) }));
 				}, config.databaseDelay);
