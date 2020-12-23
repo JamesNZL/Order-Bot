@@ -15,7 +15,7 @@ exports.master = {
 		name: 'deleted-orders',
 	},
 	category: {
-		name: 'master',
+		name: 'Master',
 	},
 };
 

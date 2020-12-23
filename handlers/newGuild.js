@@ -85,7 +85,7 @@ const findChannel = async (name, parent, guild) => {
 	return createdChannel.id;
 };
 
-const findChannels = async (names, parent, guild) => [...guild.channels.cache.filter(channel => channel.parent === parent && names.includes(channel.name)).keys()];
+const findChannels = async (names, parent, guild) => [...guild.channels.cache.filter(channel => names.includes(channel.name) && channel.parent.name === parent).keys()];
 
 const findRole = async (name, permissions, guild) => {
 	const foundRole = guild.roles.cache.find(role => role.name === name);
