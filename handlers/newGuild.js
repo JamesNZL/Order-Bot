@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const mongoose = require('mongoose');
 
 const Config = require('../models/config');
-const { master, vendor } = require('../config');
+const { master, vendor, embedColours } = require('../config');
 
 const recentlyCreated = new Set();
 
@@ -28,14 +28,14 @@ module.exports = async guild => {
 
 	const informationEmbed = new Discord.MessageEmbed()
 		.setAuthor(bot.user.tag, bot.user.displayAvatarURL({ dynamic: true }))
-		.setColor('#1abc9c')
+		.setColor(embedColours.bot)
 		.setDescription(`**Hi! I'm ${bot.user}, a custom bot designed to make your life easier!**\n\u200b`)
 		.addField('Submitting a new order', `To submit a new order, send your formatted message to your **#${config.vendor.available.name}** channel.\n\nOrders being processed will be transferred into **#${config.vendor.processing.name}**, or into **#${config.vendor.problems.name}** if there is an issue.`, true)
 		.addField('Editing an active order', `It's super easy to amend orders!\n\nTo amend an active order, simply click the ${config.emojis.edit} reaction!\n\n*Note: I must be able to private message you!*`, true)
 		.addField('Deleting an order', `Orders can be deleted from **#${config.vendor.available.name}** before they're processed or from **#${config.vendor.problems.name}** if they're too hard to amend.\n\nTo delete an order, simply click the ${config.emojis.delete} reaction, and I'll do the rest!`, true);
 
 	const formatEmbed = new Discord.MessageEmbed()
-		.setColor('#1abc9c')
+		.setColor(embedColours.bot)
 		.setTitle('Order Format')
 		.setDescription('Here\'s a guideline for speedy processing:\n```Email:                       \nPassword:                    \nCharacter:                   \nAccount name:                \nPayout: $    \n\nNotes:                       ```')
 		.setFooter('Don\'t worry, I\'ll still work with any format!');

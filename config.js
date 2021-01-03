@@ -57,6 +57,7 @@ exports.emojis = {
 };
 
 exports.embedColours = {
+	bot: '#1abc9c',
 	available: 'GOLD',
 	problems: 'RED',
 	processing: 'BLUE',

@@ -62,6 +62,7 @@ const configSchema = mongoose.Schema({
 		vendor: { type: Array, default: config.emojis.vendor },
 	},
 	embedColours: {
+		bot: { type: String, default: config.embedColours.bot },
 		available: { type: String, default: config.embedColours.available },
 		problems: { type: String, default: config.embedColours.problems },
 		processing: { type: String, default: config.embedColours.processing },
