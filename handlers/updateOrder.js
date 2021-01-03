@@ -29,5 +29,7 @@ const updateField = (order, msg, field) => {
 		else order.deleted = true;
 	}
 
+	order.updated = Date.now();
+
 	order.save();
 };

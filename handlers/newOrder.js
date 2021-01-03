@@ -28,6 +28,7 @@ module.exports = async msg => {
 		serial: orderSerial,
 		details: msg.content,
 		time: Date.now(),
+		updated: Date.now(),
 		vendor: {
 			id: msg.author.id,
 			category: msg.channel.parentID,
