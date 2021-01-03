@@ -58,3 +58,50 @@ exports.embedColours = {
 	completed: 'GREEN',
 	deleted: '',
 };
+
+exports.prices = {
+	three: {
+		name: '03',
+		url: 'https://i.imgur.com/cMSP3OC.png',
+	},
+	five: {
+		name: '05',
+		url: 'https://i.imgur.com/dBWNHcu.png',
+	},
+	eight: {
+		name: '08',
+		url: 'https://i.imgur.com/S6XJls1.png',
+	},
+	ten: {
+		name: '10',
+		url: 'https://i.imgur.com/p5IGfFh.png',
+	},
+	thirteen: {
+		name: '13',
+		url: 'https://i.imgur.com/6M9uLFc.png',
+	},
+	sixteen: {
+		name: '16',
+		url: 'https://i.imgur.com/1pBpLit.png',
+	},
+	eighteen: {
+		name: '18',
+		url: 'https://i.imgur.com/ImYAB9z.png',
+	},
+	twenty: {
+		name: '20',
+		url: 'https://i.imgur.com/otcWUXf.png',
+	},
+	twentyone: {
+		name: '21',
+		url: 'https://i.imgur.com/gb3sz7g.png',
+	},
+	twentyfour: {
+		name: '24',
+		url: 'https://i.imgur.com/AkfJbar.png',
+	},
+	twentynine: {
+		name: '29',
+		url: 'https://i.imgur.com/WzkMsFa.png',
+	},
+};
