@@ -18,7 +18,7 @@ module.exports = {
 			if (msg.content === '!e') {
 				const Order = require('../models/order');
 
-				const orders = await Order.find({ updated: { $gte: (Date.now() - 604800000) } });
+				const orders = await Order.find({ updated: { $gte: (Date.now() - 604800000) }, 'guild.id': msg.guild.id });
 
 				let earnings = 0;
 				orders.forEach(order => earnings += order.cost);
