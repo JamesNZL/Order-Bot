@@ -25,6 +25,25 @@ module.exports = async guild => {
 				formatList(obj);
 			},
 		},
+		uptime: {
+			cmd: 'uptime',
+			aliases: ['up'],
+			desc: 'Time since last restart.',
+			allowDM: true,
+			roles: [guild.roles.everyone.id],
+			noRoles: [],
+			showList: true,
+			get help() {
+				return formatList({
+					'Aliases': pAls(this),
+					'Description': this.desc,
+					'Usage': pCmd(this),
+				});
+			},
+			set help(obj) {
+				formatList(obj);
+			},
+		},
 		help: {
 			cmd: 'help',
 			aliases: ['cmd', 'cmds', 'command', 'commands'],
