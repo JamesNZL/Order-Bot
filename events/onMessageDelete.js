@@ -99,7 +99,7 @@ const checkApparentMessage = async (bot, order, path, callback) => {
 	if (order[path].message.channel.id) {
 		await bot.channels.cache.get(order[path].message.channel.id).messages.fetch(order[path].message.id)
 			.catch(error => {
-				if (error.message === 'Unknown Message' && order.state !== 'deleted') callback();
+				if (error.message === 'Unknown Message' && !order.deleted) callback();
 			});
 	}
 };

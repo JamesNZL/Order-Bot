@@ -13,7 +13,9 @@ const orderSchema = mongoose.Schema({
 	comments: { type: String, default: '' },
 	amendments: { type: String, default: '' },
 	time: Number,
+	updated: Number,
 	state: { type: String, default: 'available' },
+	deleted: { type: Boolean, default: false },
 	cost: { type: Number, default: 0 },
 	vendor: {
 		id: String,

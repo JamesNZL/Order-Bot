@@ -25,8 +25,8 @@ const updateField = (order, msg, field) => {
 	[`${field}.message.id`, `${field}.message.url`, `${field}.message.channel.id`, `${field}.message.channel.name`].forEach(_field => order.markModified(_field));
 
 	if (field === 'vendor') {
-		order.state = msg.channel.name;
-		order.markModified('state');
+		if (msg.channel.name !== 'deleted') order.state = msg.channel.name;
+		else order.deleted = true;
 	}
 
 	order.save();
