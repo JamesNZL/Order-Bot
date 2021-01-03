@@ -44,6 +44,31 @@ module.exports = async guild => {
 				formatList(obj);
 			},
 		},
+		restart: {
+			cmd: 'restart',
+			aliases: ['new', 'kill', 'update'],
+			desc: 'Restart the bot.',
+			allowDM: true,
+			roles: [guild.roles.everyone.id],
+			noRoles: [],
+			showList: true,
+			get help() {
+				return formatList({
+					'Aliases': pAls(this),
+					'Description': this.desc,
+					'Usage': pCmd(this),
+				});
+			},
+			set help(obj) {
+				formatList(obj);
+			},
+			get error() {
+				return errorText(this.help, this.cmd);
+			},
+			set error(value) {
+				errorText(this.help, this.cmd);
+			},
+		},
 		help: {
 			cmd: 'help',
 			aliases: ['cmd', 'cmds', 'command', 'commands'],
