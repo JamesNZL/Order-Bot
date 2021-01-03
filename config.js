@@ -1,6 +1,8 @@
 'use strict';
 
 exports.prefix = '!';
+exports.logo = 'https://i.imgur.com/uvbD8SC.png';
+
 exports.dateString = 'HHMM \'h\' d mmmm yyyy';
 exports.databaseDelay = 1500;
 

@@ -11,6 +11,7 @@ const configSchema = mongoose.Schema({
 		name: String,
 	},
 	prefix: { type: String, default: config.prefix },
+	logo: { type: String, default: config.logo },
 	dateString: { type: String, default: config.dateString },
 	databaseDelay: { type: Number, default: config.databaseDelay },
 	master: {
