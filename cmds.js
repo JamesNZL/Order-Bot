@@ -6,10 +6,40 @@ module.exports = async guild => {
 	const { prefix } = await require('./handlers/database')(guild);
 
 	const cmds = {
+		help: {
+			cmd: 'help',
+			aliases: ['cmd', 'cmds', 'command', 'commands'],
+			desc: {
+				general: 'Get help with using Order Bot.',
+				unqualified: 'List of the commands you can use.',
+				qualified: 'Get help with a specific command.',
+			},
+			allowDM: true,
+			roles: [guild.roles.everyone.id],
+			noRoles: [],
+			showList: true,
+			get help() {
+				return formatList({
+					'Aliases': pAls(this),
+					'Description': this.desc.general,
+					'Usage': `${pCmd(this)} [command]`,
+					'Examples': `\n${pCmd(this)}\n${pCmd(this)} ${cmds.ping.cmd}`,
+				});
+			},
+			set help(obj) {
+				formatList(obj);
+			},
+			get error() {
+				return errorText(this.help, this.cmd);
+			},
+			set error(value) {
+				errorText(this.help, this.cmd);
+			},
+		},
 		earnings: {
 			cmd: 'earnings',
 			aliases: ['e', 'earn', 'total', 'calculate', 'calc'],
-			desc: 'Calculate the total earnings from orders completed within a date range.',
+			desc: 'Calculate earnings from orders completed within a date range.',
 			allowDM: false,
 			roles: [guild.roles.everyone.id],
 			noRoles: [],

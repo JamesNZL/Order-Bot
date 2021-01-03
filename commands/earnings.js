@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const Order = require('../models/order');
 
 module.exports = async guild => {
-	const { cmds: { earnings } } = await require('../cmds')(guild);
+	const { earnings } = await require('../cmds')(guild);
 
 	earnings.execute = async msg => {
 		const orders = await Order.find({ updated: { $gte: (Date.now() - 604800000) }, 'guild.id': msg.guild.id });

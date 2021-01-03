@@ -10,13 +10,13 @@ module.exports = {
 		const { bot } = require('../');
 		const config = await require('../handlers/database')(msg.guild);
 
-		if (msg.partial || !msg.guild) return;
+		if (msg.partial) return;
+
+		if (msg.channel.id === config.master.commands.id || !msg.guild) return commandHandler(msg);
 
 		const isOrderChannel = config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id);
 
-		if (msg.channel.id === config.master.commands.id) return commandHandler(msg);
-
-		else if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
+		if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
 			msg.delete();
 			return newOrder(msg);
 		}
