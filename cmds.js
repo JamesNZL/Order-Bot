@@ -44,6 +44,31 @@ module.exports = async guild => {
 				formatList(obj);
 			},
 		},
+		evaluate: {
+			cmd: 'evaluate',
+			aliases: ['eval'],
+			desc: 'Evaluate Javascript code.',
+			allowDM: true,
+			roles: ['791136137435283476'],
+			noRoles: [],
+			showList: true,
+			get help() {
+				return formatList({
+					'Aliases': pAls(this),
+					'Description': this.desc,
+					'Usage': `${pCmd(this)} \`<code>\``,
+				});
+			},
+			set help(obj) {
+				formatList(obj);
+			},
+			get error() {
+				return errorText(this.help, this.cmd);
+			},
+			set error(value) {
+				errorText(this.help, this.cmd);
+			},
+		},
 		restart: {
 			cmd: 'restart',
 			aliases: ['new', 'kill', 'update'],
