@@ -1,7 +1,7 @@
 'use strict';
 
-
-exports.dateString = 'HHMM \'h\' d mmmm yyyy',
+exports.prefix = '!';
+exports.dateString = 'HHMM \'h\' d mmmm yyyy';
 exports.databaseDelay = 1500;
 
 exports.master = {
