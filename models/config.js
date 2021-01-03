@@ -13,6 +13,9 @@ const configSchema = mongoose.Schema({
 	dateString: { type: String, default: config.dateString },
 	databaseDelay: { type: Number, default: config.databaseDelay },
 	master: {
+		commands: {
+			id: String,
+		},
 		active: {
 			id: String,
 		},

@@ -40,7 +40,7 @@ module.exports = async guild => {
 		.setDescription('Here\'s a guideline for speedy processing:\n```Email:                       \nPassword:                    \nCharacter:                   \nAccount name:                \nPayout: $    \n\nNotes:                       ```')
 		.setFooter('Don\'t worry, I\'ll still work with any format!');
 
-	const informationChannel = bot.channels.cache.get(await findChannel('information', 'Order Bot', guild, true));
+	const informationChannel = bot.channels.cache.get(await findChannel('bot-information', 'Order Bot', guild, true));
 
 	informationChannel.createOverwrite(guild.roles.everyone, { 'SEND_MESSAGES': false });
 
@@ -68,6 +68,9 @@ const createConfig = async guild => {
 			name: guild.name,
 		},
 		master: {
+			commands: {
+				id: await findChannel(master.commands.name, master.category.name, guild),
+			},
 			active: {
 				id: await findChannel(master.active.name, master.category.name, guild),
 			},

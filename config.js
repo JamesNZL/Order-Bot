@@ -5,6 +5,9 @@ exports.dateString = 'HHMM \'h\' d mmm yy',
 exports.databaseDelay = 1500;
 
 exports.master = {
+	commands: {
+		name: 'commands',
+	},
 	active: {
 		name: 'active-orders',
 	},
