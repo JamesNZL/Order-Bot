@@ -14,7 +14,20 @@ module.exports = {
 
 		const isOrderChannel = config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id);
 
-		if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
+		if (msg.channel.id === config.master.commands.id) {
+			if (msg.content === '!e') {
+				const Order = require('../models/order');
+
+				const orders = await Order.find({ updated: { $gte: (Date.now() - 604800000) } });
+
+				let earnings = 0;
+				orders.forEach(order => earnings += order.cost);
+
+				msg.channel.send(earnings);
+			}
+		}
+
+		else if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
 			msg.delete();
 			return newOrder(msg);
 		}
