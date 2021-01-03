@@ -6,6 +6,25 @@ module.exports = async guild => {
 	const { prefix } = await require('./handlers/database')(guild);
 
 	const cmds = {
+		ping: {
+			cmd: 'ping',
+			aliases: ['p'],
+			desc: 'Test the latency of the bot.',
+			allowDM: true,
+			roles: [guild.roles.everyone.id],
+			noRoles: [],
+			showList: true,
+			get help() {
+				return formatList({
+					'Aliases': pAls(this),
+					'Description': this.desc,
+					'Usage': pCmd(this),
+				});
+			},
+			set help(obj) {
+				formatList(obj);
+			},
+		},
 		help: {
 			cmd: 'help',
 			aliases: ['cmd', 'cmds', 'command', 'commands'],
