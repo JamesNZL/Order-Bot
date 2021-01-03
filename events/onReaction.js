@@ -22,9 +22,16 @@ module.exports = {
 
 		const config = await require('../handlers/database')(reaction.message.guild);
 
+		const order = await Order.findOne({ 'vendor.message.id': reaction.message.id }) || await Order.findOne({ 'master.message.id': reaction.message.id });
+
+		if (!order) return;
+
 		if (!adminList(reaction.message.guild).includes(user.id) && !config.emojis.vendor.includes(reaction.emoji.name)) return reaction.users.remove(user.id);
 
-		if (!await Order.findOne({ 'vendor.message.id': reaction.message.id }) && !await Order.findOne({ 'master.message.id': reaction.message.id })) return reaction.users.remove(user.id);
+		if (Number(reaction.emoji.name)) {
+			order.cost = Number(reaction.emoji.name);
+			return order.save();
+		}
 
 		switch (reaction.emoji.name) {
 
