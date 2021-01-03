@@ -1,6 +1,6 @@
 'use strict';
 
-const { newOrder, updateOrder } = require('../handlers');
+const { commandHandler, newOrder, updateOrder } = require('../handlers');
 const { isOrderEmbed } = require('../modules');
 
 module.exports = {
@@ -14,18 +14,7 @@ module.exports = {
 
 		const isOrderChannel = config.vendor.channels.names.includes(msg.channel.name) || config.master.channels.ids.includes(msg.channel.id);
 
-		if (msg.channel.id === config.master.commands.id) {
-			if (msg.content === '!e') {
-				const Order = require('../models/order');
-
-				const orders = await Order.find({ updated: { $gte: (Date.now() - 604800000) }, 'guild.id': msg.guild.id });
-
-				let earnings = 0;
-				orders.forEach(order => earnings += order.cost);
-
-				msg.channel.send(earnings);
-			}
-		}
+		if (msg.channel.id === config.master.commands.id) return commandHandler(msg);
 
 		else if (!msg.embeds[0] && msg.channel.name === config.vendor.available.name) {
 			msg.delete();
