@@ -1,13 +1,13 @@
 'use strict';
 
 const Discord = require('discord.js');
-const dateFormat = require('dateformat');
+const moment = require('moment-timezone');
 const chrono = require('chrono-node');
 
 const Order = require('../models/order');
 
 const { sendMsg } = require('../handlers');
-const { formatAge } = require('../modules');
+const { centralTime, formatAge } = require('../modules');
 
 module.exports = async guild => {
 	const { earnings } = await require('../cmds')(guild);
@@ -15,11 +15,21 @@ module.exports = async guild => {
 	earnings.execute = async (msg, args) => {
 		const parsedDate = chrono.parseDate(`${args.join(' ')} ago`);
 
-		const date = (parsedDate)
-			? parsedDate.getTime()
-			: Date.now() - 604800000;
+		let fromDate, toDate;
 
-		const receivedOrders = await Order.find({ updated: { $gte: date }, 'guild.id': msg.guild.id });
+		if (parsedDate) {
+			fromDate = parsedDate.getTime();
+			toDate = Date.now();
+		}
+
+		else {
+			fromDate = getTimestamp(3, true);
+			toDate = (getTimestamp(6) > fromDate)
+				? getTimestamp(6)
+				: getTimestamp(-1);
+		}
+
+		const receivedOrders = await Order.find({ updated: { $gte: fromDate, $lte: toDate }, 'guild.id': msg.guild.id });
 
 		let earnt = 0;
 		let completed = 0;
@@ -43,7 +53,7 @@ module.exports = async guild => {
 			: '0';
 
 		const earningsEmbed = new Discord.MessageEmbed()
-			.setTitle(`Report for last ${formatAge(date)} (${dateFormat(date, 'shortDate')} – ${dateFormat('shortDate')}):`)
+			.setTitle(`Report for last ${formatAge(fromDate)} (${centralTime(fromDate, 'shortDate')} – ${centralTime(Date.now(), 'shortDate')}):`)
 			.setAuthor(msg.guild.name, msg.guild.iconURL({ dynamic: true }))
 			.setColor('GREEN')
 			.addField('Total Orders', receivedOrders.length)
@@ -56,4 +66,13 @@ module.exports = async guild => {
 	};
 
 	return earnings;
+};
+
+const getTimestamp = (lastWeekDay, startOfDay) => {
+	const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+	const currentWeekMonday = currentDate.getDate() - currentDate.getDay() + 1;
+	const date = currentDate.setDate(currentWeekMonday - lastWeekDay);
+	return (startOfDay)
+		? moment.tz(date, 'America/Chicago').startOf('day').valueOf()
+		: moment.tz(date, 'America/Chicago').endOf('day').valueOf();
 };
