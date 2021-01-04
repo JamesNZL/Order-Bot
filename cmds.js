@@ -137,7 +137,7 @@ module.exports = async guild => {
 					'Aliases': pAls(this),
 					'Description': this.desc,
 					'Usage': `${pCmd(this)}`,
-					'Examples': `\n${pCmd(this)}\n${pCmd(this)} 1d\n${pCmd(this)} 14d`,
+					'Examples': `\n${pCmd(this)}\n${pCmd(this)} 1 day\n${pCmd(this)} 2 weeks`,
 				});
 			},
 			set help(obj) {
