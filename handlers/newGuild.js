@@ -37,7 +37,7 @@ module.exports = async guild => {
 	const formatEmbed = new Discord.MessageEmbed()
 		.setColor(embedColours.bot)
 		.setTitle('Order Format')
-		.setDescription('Here\'s a guideline for speedy processing:\n```Email:                       \nPassword:                    \nCharacter:                   \nAccount name:                \nPayout: $    \n\nNotes:                       ```')
+		.setDescription('Here\'s a guideline for speedy processing:\n```Email: \nPassword: \nCharacter: \nAccount name: \nPayout: $\n\nNotes:                       ```')
 		.setFooter('Don\'t worry, I\'ll still work with any format!');
 
 	const informationChannel = bot.channels.cache.get(await findChannel('bot-information', 'Order Bot', guild, true));
