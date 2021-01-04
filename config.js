@@ -110,4 +110,8 @@ exports.prices = {
 		name: '29',
 		url: 'https://i.imgur.com/WzkMsFa.png',
 	},
+	thirty: {
+		name: '30',
+		url: 'https://i.imgur.com/7NYt2UF.png',
+	},
 };
