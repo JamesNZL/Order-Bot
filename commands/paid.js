@@ -46,8 +46,6 @@ module.exports = async guild => {
 				paid: _paid,
 				updated: Date.now(),
 			});
-
-			await balance.save();
 		}
 
 		else {
@@ -55,8 +53,9 @@ module.exports = async guild => {
 			else balance.paid += _paid;
 
 			balance.updated = Date.now();
-			balance.save();
 		}
+
+		balance.save();
 
 		const paidEmbed = new Discord.MessageEmbed()
 			.setTitle(`Payment report for last ${formatAge(friday)} (${centralTime(friday, 'shortDate')} – ${centralTime(Date.now(), 'shortDate')}):`)
