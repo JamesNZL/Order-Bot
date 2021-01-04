@@ -8,7 +8,7 @@ module.exports = async guild => {
 	const cmds = {
 		ping: {
 			cmd: 'ping',
-			aliases: ['p'],
+			aliases: [''],
 			desc: 'Test the latency of the bot.',
 			allowDM: true,
 			roles: [guild.roles.everyone.id],
@@ -138,6 +138,32 @@ module.exports = async guild => {
 					'Description': this.desc,
 					'Usage': `${pCmd(this)} [period]`,
 					'Examples': `\n${pCmd(this)}\n${pCmd(this)} 1 day\n${pCmd(this)} 2 weeks`,
+				});
+			},
+			set help(obj) {
+				formatList(obj);
+			},
+			get error() {
+				return errorText(this.help, this.cmd);
+			},
+			set error(value) {
+				errorText(this.help, this.cmd);
+			},
+		},
+		paid: {
+			cmd: 'paid',
+			aliases: ['p', 'balance', 'bal'],
+			desc: 'Calculate or update outstanding balances.',
+			allowDM: false,
+			roles: [],
+			noRoles: [vendor.role.id],
+			showList: true,
+			get help() {
+				return formatList({
+					'Aliases': pAls(this),
+					'Description': this.desc,
+					'Usage': `${pCmd(this)} [amount]`,
+					'Examples': `\n${pCmd(this)}\n${pCmd(this)} 21`,
 				});
 			},
 			set help(obj) {
