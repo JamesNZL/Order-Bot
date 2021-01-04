@@ -62,7 +62,7 @@ module.exports = async msg => {
 			.setColor('GOLD')
 			.setTitle(`Order #${orderSerial}`)
 			.setAuthor(msg.member.displayName, msg.author.displayAvatarURL({ dynamic: true }))
-			.setDescription(`\`\`\`${msg.content}\`\`\``)
+			.setDescription(msg.content)
 			.setTimestamp();
 
 		if (url) embed.addField('Order Link', `[Vendor Message](${availableMessage.url})`);

@@ -43,7 +43,7 @@ module.exports = {
 					},
 					embeds: [new Discord.MessageEmbed({
 						title: `Order #${order.serial}`,
-						description: `\`\`\`${order.details}\`\`\``,
+						description: order.details,
 						color: config.embedColours[order.state],
 						timestamp: order.time,
 						author: {
