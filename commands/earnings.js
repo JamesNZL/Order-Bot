@@ -1,6 +1,7 @@
 'use strict';
 
 const Discord = require('discord.js');
+const dateFormat = require('dateformat');
 const chrono = require('chrono-node');
 
 const Order = require('../models/order');
@@ -42,7 +43,7 @@ module.exports = async guild => {
 			: '0';
 
 		const earningsEmbed = new Discord.MessageEmbed()
-			.setTitle(`Report for past ${formatAge(date)}:`)
+			.setTitle(`Report for last ${formatAge(date)} (${dateFormat(date, 'shortDate')} – ${dateFormat('shortDate')}):`)
 			.setAuthor(msg.guild.name, msg.guild.iconURL({ dynamic: true }))
 			.setColor('GREEN')
 			.addField('Total Orders', receivedOrders.length)
