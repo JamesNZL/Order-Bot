@@ -3,7 +3,7 @@
 const { formatList } = require('./modules');
 
 module.exports = async guild => {
-	const { prefix } = await require('./handlers/database')(guild);
+	const { prefix, vendor } = await require('./handlers/database')(guild);
 
 	const cmds = {
 		ping: {
@@ -74,7 +74,7 @@ module.exports = async guild => {
 			aliases: ['new', 'kill', 'update'],
 			desc: 'Restart the bot.',
 			allowDM: true,
-			roles: [guild.roles.everyone.id],
+			roles: ['791136137435283476'],
 			noRoles: [],
 			showList: true,
 			get help() {
@@ -126,11 +126,11 @@ module.exports = async guild => {
 		},
 		earnings: {
 			cmd: 'earnings',
-			aliases: ['e', 'earn', 'total', 'calculate', 'calc'],
+			aliases: ['e', 'earn', 'total', 'calculate', 'calc', 'generate', 'gen', 'report'],
 			desc: 'Calculate earnings from orders completed within a date range.',
 			allowDM: false,
-			roles: [guild.roles.everyone.id],
-			noRoles: [],
+			roles: [],
+			noRoles: [vendor.role.id],
 			showList: true,
 			get help() {
 				return formatList({
