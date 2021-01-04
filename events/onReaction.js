@@ -1,12 +1,11 @@
 'use strict';
 
 const Discord = require('discord.js');
-const dateFormat = require('dateformat');
 
 const Order = require('../models/order');
 
 const { adminList, sendDM, updateOrder } = require('../handlers');
-const { parseSerial } = require('../modules');
+const { centralTime, parseSerial } = require('../modules');
 
 const pendingInput = new Set();
 
@@ -238,8 +237,8 @@ const processUpdate = async (bot, config, input, type, user, msg) => {
 	const existingIndex = updatedEmbed.fields.findIndex(field => field.name === type);
 
 	(existingIndex !== -1)
-		? updatedEmbed.fields[existingIndex].value += `\n${dateFormat(config.dateString)} — ${input[type.toLowerCase()]}`
-		: updatedEmbed.addField(type, `\n${dateFormat(config.dateString)} — ${input[type.toLowerCase()]}`);
+		? updatedEmbed.fields[existingIndex].value += `\n${centralTime(Date.now(), config.dateString)} — ${input[type.toLowerCase()]}`
+		: updatedEmbed.addField(type, `\n${centralTime(Date.now(), config.dateString)} — ${input[type.toLowerCase()]}`);
 
 	await sendDM(user, new Discord.MessageEmbed(updatedEmbed).addField('Order Link', `[Order Message](${msg.url})`).setTimestamp(), msg.channel);
 
