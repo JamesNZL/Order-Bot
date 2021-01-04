@@ -43,11 +43,11 @@ module.exports = {
 					},
 					embeds: [new Discord.MessageEmbed({
 						title: `Order #${order.serial}`,
-						description: order.details,
+						description: `\`\`\`${order.details}\`\`\``,
 						color: config.embedColours[order.state],
 						timestamp: order.time,
 						author: {
-							name: bot.channels.cache.get(findMatch('channel')).guild.members.cache.get(order.vendor.id).displayName,
+							name: bot.channels.cache.get(findMatch('channel').id).guild.members.cache.get(order.vendor.id).displayName,
 							iconURL: bot.users.cache.get(order.vendor.id).displayAvatarURL({ dynamic: true }),
 						},
 					})],
