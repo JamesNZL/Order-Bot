@@ -58,7 +58,8 @@ module.exports = async guild => {
 		balance.save();
 
 		const paidEmbed = new Discord.MessageEmbed()
-			.setTitle(`Payment report for last ${formatAge(friday)} (${centralTime(friday, 'shortDate')} – ${centralTime(Date.now(), 'shortDate')}):`)
+			.setTitle('Payment Report')
+			.setDescription(`Last ${formatAge(friday)} (${centralTime(friday, 'shortDate')} – ${centralTime(Date.now(), 'shortDate')})`)
 			.setAuthor(msg.guild.name, msg.guild.iconURL({ dynamic: true }))
 			.setColor('GREEN')
 			.addField('Total Balance', `$${earnt}`)
