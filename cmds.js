@@ -136,7 +136,7 @@ module.exports = async guild => {
 				return formatList({
 					'Aliases': pAls(this),
 					'Description': this.desc,
-					'Usage': `${pCmd(this)}`,
+					'Usage': `${pCmd(this)} [period]`,
 					'Examples': `\n${pCmd(this)}\n${pCmd(this)} 1 day\n${pCmd(this)} 2 weeks`,
 				});
 			},
