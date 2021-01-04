@@ -37,7 +37,10 @@ module.exports = {
 				msg = {
 					id: msg.id,
 					url: findMatch('url'),
-					channel: bot.channels.cache.get(findMatch('channel')),
+					channel: bot.channels.cache.get(findMatch('channel').id),
+					guild: {
+						id: bot.channels.cache.get(findMatch('channel').id).guild.id,
+					},
 					embeds: [new Discord.MessageEmbed({
 						title: `Order #${order.serial}`,
 						description: order.details,
