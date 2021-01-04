@@ -1,6 +1,8 @@
 'use strict';
 
 const Discord = require('discord.js');
+const chrono = require('chrono-node');
+
 const Order = require('../models/order');
 
 const { sendMsg } = require('../handlers');
@@ -10,11 +12,13 @@ module.exports = async guild => {
 	const { earnings } = await require('../cmds')(guild);
 
 	earnings.execute = async (msg, args) => {
-		let period;
+		const parsedDate = chrono.parseDate(`${args.join(' ')} ago`);
 
-		if (!args[0]) period = 604800000;
+		const date = (parsedDate)
+			? parsedDate.getTime()
+			: Date.now() - 604800000;
 
-		const receivedOrders = await Order.find({ updated: { $gte: (Date.now() - period) }, 'guild.id': msg.guild.id });
+		const receivedOrders = await Order.find({ updated: { $gte: date }, 'guild.id': msg.guild.id });
 
 		let earnt = 0;
 		let completed = 0;
@@ -33,13 +37,17 @@ module.exports = async guild => {
 			}
 		});
 
+		const unassignedList = (unassigned.length)
+			? `> ${unassigned.join('\n> ')}`
+			: '0';
+
 		const earningsEmbed = new Discord.MessageEmbed()
-			.setTitle(`Report for past ${formatAge(period, true)}:`)
+			.setTitle(`Report for past ${formatAge(date)}:`)
 			.setAuthor(msg.guild.name, msg.guild.iconURL({ dynamic: true }))
 			.setColor('GREEN')
 			.addField('Total Orders', receivedOrders.length)
 			.addField('Completed Orders', completed)
-			.addField('Unassigned Orders', `> ${unassigned.join('\n> ')}`)
+			.addField('Unassigned Orders', unassignedList)
 			.addField('Total Earnings', `$${earnt}`)
 			.setTimestamp();
 

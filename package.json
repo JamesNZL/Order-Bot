@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chrono-node": "^2.1.10",
     "dateformat": "^4.4.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
