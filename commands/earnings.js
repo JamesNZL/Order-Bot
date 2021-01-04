@@ -52,7 +52,7 @@ module.exports = async guild => {
 			: '0';
 
 		const earningsEmbed = new Discord.MessageEmbed()
-			.setTitle(`Report for last ${formatAge(fromDate)} (${centralTime(fromDate, 'shortDate')} – ${centralTime(Date.now(), 'shortDate')}):`)
+			.setTitle(`Earnings report for last ${formatAge(fromDate)} (${centralTime(fromDate, 'shortDate')} – ${centralTime(Date.now(), 'shortDate')}):`)
 			.setAuthor(msg.guild.name, msg.guild.iconURL({ dynamic: true }))
 			.setColor('GREEN')
 			.addField('Total Orders', receivedOrders.length)
