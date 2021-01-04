@@ -17,7 +17,7 @@ module.exports = (raw, elapsed) => {
 	if ((raw - (years * 31556952000) - (months * 2629800000) - (days * 86400000) - (hours * 3600000)) > 60000) minutes = Math.floor((raw - (years * 31556952000) - (months * 2629800000) - (days * 86400000) - (hours * 3600000)) / 60000);
 	if ((raw - (years * 31556952000) - (months * 2629800000) - (days * 86400000) - (hours * 3600000) - (minutes * 60000)) > 1000) seconds = Math.floor((raw - (years * 31556952000) - (months * 2629800000) - (days * 86400000) - (hours * 3600000) - (minutes * 60000)) / 1000);
 
-	return (years)
+	let result = (years)
 		? `${years} years, ${months} months, ${days} days`
 		: (months)
 			? `${months} months, ${days} days, ${hours} hrs`
@@ -28,4 +28,10 @@ module.exports = (raw, elapsed) => {
 					: (minutes)
 						? `${minutes} min, ${seconds} sec`
 						: `${seconds} sec`;
+
+	result.split(', ').forEach(str => {
+		if (!Number(str.split(' ')[0])) result = result.replace(`, ${str}`, '');
+	});
+
+	return result;
 };
