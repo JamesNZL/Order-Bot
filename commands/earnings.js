@@ -1,13 +1,12 @@
 'use strict';
 
 const Discord = require('discord.js');
-const moment = require('moment-timezone');
 const chrono = require('chrono-node');
 
 const Order = require('../models/order');
 
 const { sendMsg } = require('../handlers');
-const { centralTime, formatAge } = require('../modules');
+const { centralTime, formatAge, getTimestamp } = require('../modules');
 
 module.exports = async guild => {
 	const { earnings } = await require('../cmds')(guild);
@@ -66,13 +65,4 @@ module.exports = async guild => {
 	};
 
 	return earnings;
-};
-
-const getTimestamp = (lastWeekDay, startOfDay) => {
-	const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }));
-	const currentWeekMonday = currentDate.getDate() - currentDate.getDay() + 1;
-	const date = currentDate.setDate(currentWeekMonday - lastWeekDay);
-	return (startOfDay)
-		? moment.tz(date, 'America/Chicago').startOf('day').valueOf()
-		: moment.tz(date, 'America/Chicago').endOf('day').valueOf();
 };
