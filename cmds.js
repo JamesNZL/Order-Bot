@@ -13,6 +13,8 @@ module.exports = async guild => {
 			allowDM: true,
 			roles: [guild.roles.everyone.id],
 			noRoles: [],
+			users: [],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({
@@ -32,6 +34,8 @@ module.exports = async guild => {
 			allowDM: true,
 			roles: [guild.roles.everyone.id],
 			noRoles: [],
+			users: [],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({
@@ -49,8 +53,10 @@ module.exports = async guild => {
 			aliases: ['eval'],
 			desc: 'Evaluate Javascript code.',
 			allowDM: true,
-			roles: ['791136137435283476'],
+			roles: [],
 			noRoles: [],
+			users: ['192181901065322496'],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({
@@ -74,8 +80,10 @@ module.exports = async guild => {
 			aliases: ['new', 'kill', 'update'],
 			desc: 'Restart the bot.',
 			allowDM: true,
-			roles: ['791136137435283476'],
+			roles: [],
 			noRoles: [],
+			users: ['192181901065322496'],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({
@@ -105,6 +113,8 @@ module.exports = async guild => {
 			allowDM: true,
 			roles: [guild.roles.everyone.id],
 			noRoles: [],
+			users: [],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({
@@ -131,6 +141,8 @@ module.exports = async guild => {
 			allowDM: false,
 			roles: [],
 			noRoles: [vendor.role.id],
+			users: [],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({
@@ -157,6 +169,8 @@ module.exports = async guild => {
 			allowDM: false,
 			roles: [],
 			noRoles: [vendor.role.id],
+			users: [],
+			noUsers: [],
 			showList: true,
 			get help() {
 				return formatList({

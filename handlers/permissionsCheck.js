@@ -1,10 +1,14 @@
 'use strict';
 
-module.exports = (memberRoles, cmd) => {
-	const noDisallowedRoles = !cmd.devOnly && cmd.noRoles.length && !memberRoles.some(roles => cmd.noRoles.includes(roles.id));
-	const hasAllowedRoles = !cmd.devOnly && cmd.roles.length && memberRoles.some(roles => cmd.roles.includes(roles.id));
+module.exports = (user, memberRoles, cmd) => {
+	try {
+		if (cmd.users.includes(user.id)) throw true;
+		else if (cmd.noUsers.includes(user.id)) throw false;
+		else if (memberRoles.some(roles => cmd.roles.includes(roles.id))) throw true;
+		else if (memberRoles.some(roles => cmd.noRoles.includes(roles.id))) throw false;
+		else if (cmd.noUsers.length || cmd.noRoles.length) throw true;
+		else if (cmd.users.length || cmd.roles.length) throw false;
+	}
 
-	return (noDisallowedRoles || hasAllowedRoles)
-		? true
-		: false;
+	catch (result) { return result; }
 };

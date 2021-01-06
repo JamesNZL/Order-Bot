@@ -13,6 +13,6 @@ module.exports = async (msg, cmd) => {
 	const memberRoles = member.roles.cache;
 
 	return (memberRoles)
-		? permissionsCheck(memberRoles, cmd)
+		? permissionsCheck(msg.author, memberRoles, cmd)
 		: await getRoleError(msg);
 };
