@@ -26,6 +26,7 @@
 - Already in-place frameworks and handlers for commands and database querying, allowing for easy future development
 - Dynamic command permissions system, allowing for commands to be white/blacklisted based on Roles or even specific users
 - Fully-featured command help and error responses for ease of use
+- Command listener on message edits to maximise efficiency
 
 ### Commands List
 
