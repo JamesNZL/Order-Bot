@@ -5,7 +5,7 @@ const moment = require('moment-timezone');
 module.exports = (lastWeekDay, startOfDay) => {
 	const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }));
 
-	const monday = (currentDate.getDay() >= 1 && currentDate.getDay() <= 4)
+	const monday = (currentDate.getDay() <= 4)
 		? currentDate.getDate() - currentDate.getDay() + 1
 		: currentDate.getDate() - currentDate.getDay() + 8;
 
