@@ -118,4 +118,8 @@ exports.prices = {
 		name: '32',
 		url: 'https://i.imgur.com/PdNMq5U.png',
 	},
+	thirtyseven: {
+		name: '37',
+		url: 'https://i.imgur.com/XGJ0Uxh.png',
+	},
 };
