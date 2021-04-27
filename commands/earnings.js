@@ -40,6 +40,9 @@ module.exports = async guild => {
 				completed++;
 
 				if (order.cost === 0) {
+					if (unassigned[unassigned.length - 1] === '...') return;
+					else if (`> ${unassigned.join('\n> ')}`.length > 900) return unassigned.push('...');
+
 					(order.vendor.message.url)
 						? unassigned.push(`[Order #${order.serial}](${order.vendor.message.url})`)
 						: unassigned.push(`Order #${order.serial}`);
