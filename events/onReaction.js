@@ -237,8 +237,8 @@ const processUpdate = async (bot, config, input, type, user, msg) => {
 	const existingIndex = updatedEmbed.fields.findIndex(field => field.name === type);
 
 	(existingIndex !== -1)
-		? updatedEmbed.fields[existingIndex].value += `\n${centralTime(Date.now(), config.dateString)} — ${input[type.toLowerCase()]}`
-		: updatedEmbed.addField(type, `\n${centralTime(Date.now(), config.dateString)} — ${input[type.toLowerCase()]}`);
+		? updatedEmbed.fields[existingIndex].value += `\n${centralTime(Date.now(), config.timeString)} — ${input[type.toLowerCase()]}`
+		: updatedEmbed.addField(type, `\n${centralTime(Date.now(), config.timeString)} — ${input[type.toLowerCase()]}`);
 
 	await sendDM(user, new Discord.MessageEmbed(updatedEmbed).addField('Order Link', `[Order Message](${msg.url})`).setTimestamp(), msg.channel);
 

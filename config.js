@@ -4,6 +4,7 @@ exports.prefix = '!';
 exports.logo = 'https://i.imgur.com/uvbD8SC.png';
 
 exports.dateString = 'HHMM \'h\' d mmmm yyyy';
+exports.timeString = 'hhMM';
 exports.databaseDelay = 1500;
 
 exports.master = {
